@@ -5,49 +5,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:remedium/create_patient.dart';
+import 'package:remedium/nav_drawer.dart';
 import 'package:remedium/patient_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 final _firestore = Firestore.instance;
 FirebaseUser loggedInUser;
-
-class patient {
-  String name;
-  String age;
-  String date;
-  String status;
-  String condition;
-  String gender;
-  patient(
-      {this.name,
-      this.gender,
-      this.age,
-      this.date,
-      this.status,
-      this.condition});
-
-  String get_name() {
-    return name;
-  }
-
-  String get_date() {
-    return date;
-  }
-
-  String get_gender() {
-    return gender;
-  }
-
-  String get_status() {
-    return status;
-  }
-
-  String get_condition() {
-    return condition;
-  }
-}
-
 
 
 class doctor_inventory extends StatefulWidget {
@@ -78,11 +41,12 @@ class _doctor_inventoryState extends State<doctor_inventory> {
       print(e);
     }
   }
+
   @override
   Widget build(BuildContext context) {
-
-        return Scaffold(
-    appBar: new PreferredSize(
+    return Scaffold(
+      drawer: nav_drawer(),
+      appBar: new PreferredSize(
         child: new Container(
           padding: new EdgeInsets.only(top: MediaQuery.of(context).padding.top),
           child: Padding(
@@ -155,14 +119,11 @@ class _doctor_inventoryState extends State<doctor_inventory> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             MessagesStream(),
-
           ],
         ),
       ),
-
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => create_patient()),
@@ -175,10 +136,6 @@ class _doctor_inventoryState extends State<doctor_inventory> {
     );
   }
 }
-
-
-
-
 
 class MessagesStream extends StatelessWidget {
   @override
@@ -195,25 +152,31 @@ class MessagesStream extends StatelessWidget {
         }
         final messages = snapshot.data.documents;
         List<MessageBubble> messageBubbles = [];
+
+
+
         for (var message in messages) {
-          final name =message.data['last_name'];
+          final name = message.data['last_name'];
           final gender = message.data['gender'];
           final date = message.data['date'];
+          final email = message.data['email'];
           String result = message.data['result'];
-          if(result==null) result="pending";
+          if (result == null) result = "pending";
+          final uid = message.data['doctor_uid'];
 
+          final currentUser = loggedInUser.uid;
 
-          final currentUser = loggedInUser.email;
+          if(currentUser == uid ){
+            final messageBubble = MessageBubble(
+              name: name,
+              gender: gender,
+              date: date,
+              result: result,
+              email: email,
+            );
 
-          final messageBubble = MessageBubble(
-            name: name,
-            gender: gender,
-            date: date,
-            result: result,
-
-          );
-
-          messageBubbles.add(messageBubble);
+            messageBubbles.add(messageBubble);
+          }
         }
         return Expanded(
           child: ListView(
@@ -227,31 +190,32 @@ class MessagesStream extends StatelessWidget {
 }
 
 class MessageBubble extends StatelessWidget {
-  MessageBubble({this.name, this.gender,this.date,this.result });
-
+  MessageBubble({this.email, this.name, this.gender, this.date, this.result});
+  final String email;
   final String name;
   final String gender;
   final String date;
   final String result;
 
-
-
   @override
   Widget build(BuildContext context) {
     return FlatButton(
-      onPressed: (){Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => patient_profile()),
-      );},
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => patient_profile(
+                    recieved_date: email,
+                  )),
+        );
+      },
       child: Card(
-
         elevation: 15,
         shadowColor: Colors.blue,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(25.0),
         ),
         child: Row(
-
           children: [
             Padding(
               padding: const EdgeInsets.all(35.0),
@@ -261,9 +225,7 @@ class MessageBubble extends StatelessWidget {
                   Text("Name: ${name}"),
                   Text("Gender: ${gender}"),
                   Text("Test Date: ${date}"),
-
                   Text("COVID-19 Status: ${result}"),
-
                 ],
               ),
             ),

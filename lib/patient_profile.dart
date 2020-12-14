@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:remedium/covid.dart';
 import 'package:remedium/doctor_inventory.dart';
 
 import 'doctor_sign_in.dart';
@@ -11,9 +12,17 @@ import 'doctor_sign_in.dart';
 final _firestore = Firestore.instance;
 
 class patient_profile extends StatefulWidget {
+  final recieved_date;
+  patient_profile({this.recieved_date});
+   void get_date(){
+     print(recieved_date);
+
+
+  }
   @override
   _patient_profileState createState() => _patient_profileState();
 }
+
 
 class _patient_profileState extends State<patient_profile> {
   final _auth = FirebaseAuth.instance;
@@ -73,6 +82,7 @@ class _patient_profileState extends State<patient_profile> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+
             MessagesStream(),
 
           ],
@@ -84,8 +94,20 @@ class _patient_profileState extends State<patient_profile> {
 }
 
 class MessagesStream extends StatelessWidget {
+ String email;
+ String first_name;
+ String last_name;
+ String gender;
+ String condition;
+ String telephone;
+ String result;
+ String age;
+
+
   @override
   Widget build(BuildContext context) {
+
+
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore.collection('patient').snapshots(),
       builder: (context, snapshot) {
@@ -98,40 +120,166 @@ class MessagesStream extends StatelessWidget {
         }
         final messages = snapshot.data.documents;
         List<MessageBubble> messageBubbles = [];
+
         for (var message in messages) {
-          final name =message.data['last_name'];
-          final gender = message.data['gender'];
-          final condition = message.data['condition'];
+
+          if(message.data['email']== 'ali@gmail.com')
+            {  email = message.data['email'];
+         first_name =message.data['first_name'];
+            last_name =message.data['last_name'];
+           gender = message.data['gender'];
+          condition = message.data['condition'];
           //final date = message.data['date'];
-          final telephone = message.data['telephone'];
-          String result = message.data['result'];
+          telephone = message.data['telephone'];
+            age = message.data['age'];
+           result = message.data['result'];
           if(result==null) result="pending";
-          final email = message.data['email'];
+
 
 
           final currentUser = loggedInUser.email;
 
-          final messageBubble = MessageBubble(
-            name: name,
-            gender: gender,
-            //date: date,
-            condition: condition,
-            result: result,
-            telephone: telephone,
-              email: email,
-          );
 
-          messageBubbles.add(messageBubble);
+
+          }
         }
         return Expanded(
-          child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-            children: messageBubbles,
-          ),
+          child: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: <Color>[
+                  Color(0xFFC8EAF4),
+                  Color(0xFFD5EAD7),
+                  Color(0xFFFDFEFF),
+                ],
+              ),
+            ),
+            child: Column(
+
+
+              children: [
+                Center(
+                  child: Column(
+                    children: [
+                      SizedBox(height: 10,),
+                      GestureDetector(
+                        child: CircleAvatar(
+                          radius: 55,
+                          backgroundColor: Color(0xffFDCF09),
+                          child: Icon(
+                            Icons.camera_alt,
+                            color: Colors.grey[800],
+                          ),
+                        ),
+                      ),
+                      Text("${first_name} ${last_name}",style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,),),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 30,),
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Column(
+                            children: [
+                              Text("Age", style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,color: Colors.black45),),
+                              Text("${age}", style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,),),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text("Gender ",style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,color: Colors.black45),),
+                              Text(gender, style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,),),
+                            ],
+                          ),
+
+                        ],
+                      ),
+                      SizedBox(height: 50,),
+                      Row (
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Column(
+                            children: [
+                              Text("Email", style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,color: Colors.black45),),
+                              Text(email, style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,),),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text("Phone",style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,color: Colors.black45),),
+                              Text(telephone, style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,),),
+                            ],
+                          ),
+
+                        ],
+                      ),
+                      SizedBox(height: 50
+                        ,),
+                      Column(
+
+                        children: [
+                          Text("Pre-Diagnosis Condition: ",style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,color: Colors.black45),),
+                        ],
+                      ),
+                      Column(
+                        children: <Widget>[
+                          Card(
+                              color: Colors.white,
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(condition,style:TextStyle(fontSize: 16),),
+                              )
+                          )
+                        ],
+                      ),SizedBox(height: 50
+                        ,),
+                      Row(
+
+
+                        children: [
+                          Text("Status: ",style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,),),
+                          Text(result,style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,color: Colors.red),),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height:15),
+
+
+                Container(
+
+                  child: Column(
+
+                    children: [
+                      RaisedButton(
+                          onPressed: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => covid()),
+                            );},
+                          color: Colors.blue,
+                          padding: EdgeInsets.fromLTRB(80, 20, 80, 20),
+                          shape:  new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+
+                          child: Text("Create Report",style:TextStyle(color: Colors.white))),
+                    ],
+                  ),
+                ),],
+            ),
+          )
         );
       },
     );
   }
+
+
 }
 
 
@@ -246,7 +394,12 @@ class MessageBubble extends StatelessWidget {
 
               children: [
                 RaisedButton(
-                    onPressed: (){;},
+                    onPressed: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => covid()),
+                      );},
                     color: Colors.blue,
                     padding: EdgeInsets.fromLTRB(80, 20, 80, 20),
                     shape:  new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),

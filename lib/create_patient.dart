@@ -63,6 +63,7 @@ class _create_patientState extends State<create_patient> {
             child: Container(
               child: new Wrap(
                 children: <Widget>[
+
                   new ListTile(
                       leading: new Icon(Icons.photo_library),
                       title: new Text('Photo Library'),
@@ -138,6 +139,7 @@ class _create_patientState extends State<create_patient> {
         ),
         child: Column(
           children: [
+            SizedBox(height:15),
             GestureDetector(
               onTap: () {
                 _showPicker(context);
@@ -388,8 +390,10 @@ class _create_patientState extends State<create_patient> {
                       borderRadius: new BorderRadius.circular(30.0)),
                   onPressed: () async {
                     try {
-                      ;
+                      final FirebaseUser user = await _auth.currentUser();
+                      final uid = user.uid;
                       _firestore.collection('patient').add({
+                        'doctor_uid' : uid,
                         'first_name': first_name,
                         'email': email,
                         'last_name': last_name,

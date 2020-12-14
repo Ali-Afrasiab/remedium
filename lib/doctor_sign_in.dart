@@ -96,9 +96,19 @@ class doctor_sign_in extends StatelessWidget {
                   shape: new RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(30.0)),
                   onPressed: () async {
+
+                    /*Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => doctor_inventory()),
+                    );
+                    */
                     try {
                       final newUser = await _auth.signInWithEmailAndPassword(
                           email: email, password: password);
+                      final FirebaseUser user = await _auth.currentUser();
+                      final uid = user.uid;
+
                       if (newUser != null)
                         Navigator.push(
                           context,
@@ -107,6 +117,7 @@ class doctor_sign_in extends StatelessWidget {
                         );
                     } catch (e) {
                       print(e);
+
                     }
                   },
                   child: Text("Login", style: TextStyle(color: Colors.white))),
