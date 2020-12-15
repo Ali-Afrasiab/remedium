@@ -15,30 +15,46 @@ class doctor_sign_in extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new PreferredSize(
+      appBar:
+      new PreferredSize(
+
         child: new Container(
           padding: new EdgeInsets.only(top: MediaQuery.of(context).padding.top),
           child: new Padding(
             padding: const EdgeInsets.only(left: 30.0, top: 20.0, bottom: 20.0),
             child: Center(
-              child: new Text(
-                'Remedium',
-                style: new TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white),
+              child: Row(
+
+                children: [
+                  IconButton(
+
+                      icon: Icon(Icons.arrow_back,color: CupertinoColors.white,),
+                      onPressed: () {
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MyApp()),
+                        );
+                      }),
+                  SizedBox(width: 90,),
+
+                  new Text(
+                    'Remedium',
+                    style: new TextStyle(
+                        fontSize: 23.0,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white),
+                  ),
+                ],
               ),
             ),
           ),
           decoration: new BoxDecoration(
-              gradient: new LinearGradient(colors: [
-                Color(0xFF3DC9EE),
-                Color(0xFF78CFD9),
-                Color(0xFFBCE4E6),
-              ]),
+              color: Color(0xFF202125),
               boxShadow: [
                 new BoxShadow(
-                  color: Colors.grey[500],
+                  color: Colors.blueGrey,
                   blurRadius: 20.0,
                   spreadRadius: 1.0,
                 ),
@@ -48,13 +64,7 @@ class doctor_sign_in extends StatelessWidget {
       ),
       body: Container(
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: <Color>[
-              Color(0xFFC8EAF4),
-              Color(0xFFD5EAD7),
-              Color(0xFFFDFEFF),
-            ],
-          ),
+          color: Color(0xFF202125),
         ),
         child: Center(
           child: Column(
@@ -62,36 +72,61 @@ class doctor_sign_in extends StatelessWidget {
             children: [
               Padding(
                   padding: EdgeInsets.all(20),
-                  child: Text("Doctor", style: TextStyle(fontSize: 25))),
+                  child: Text("Doctor", style: TextStyle(fontSize: 25,color:Colors.white))),
               Padding(
-                padding: EdgeInsets.all(20),
-                child: TextField(
+                padding: EdgeInsets.all(10),
+                child: TextField(style: TextStyle(color: Colors.white),
+
                   keyboardType: TextInputType.emailAddress,
                   onChanged: (value) {
                     email = value;
                   },
-                  obscureText: true,
+                 // obscureText: true,
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'User Name',
+                    filled: true,
+                    fillColor: Color(0xFF3C4043),
+
+
+                    border: new OutlineInputBorder(
+                      borderRadius: const BorderRadius.all(
+                        const Radius.circular(50.0),
+                      ),
+                    ),
+                      hintStyle:
+                      new TextStyle(color: Color(0XFFDCDDE1)),
+                      hintText: "User Name",
+
+
                   ),
                 ),
               ),
+
               Padding(
-                padding: EdgeInsets.all(20),
-                child: TextField(
+                padding: EdgeInsets.all(10),
+                child: TextField(style: TextStyle(color: Colors.white),
                   onChanged: (value) {
                     password = value;
                   },
                   obscureText: true,
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Password',
+                    filled: true,
+                    fillColor: Color(0xFF3C4043),
+
+                    border: new OutlineInputBorder(
+                      borderRadius: const BorderRadius.all(
+                        const Radius.circular(50.0),
+                      ),
+                    ),
+                    hintStyle:
+                    new TextStyle(color: Color(0XFFDCDDE1)),
+                    hintText: "Email",
+
+
                   ),
                 ),
               ),
               RaisedButton(
-                  color: Colors.blue,
+                  color: Color(0XFF3C4043),
                   padding: EdgeInsets.fromLTRB(80, 15, 80, 15),
                   shape: new RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(30.0)),
@@ -120,13 +155,14 @@ class doctor_sign_in extends StatelessWidget {
 
                     }
                   },
-                  child: Text("Login", style: TextStyle(color: Colors.white))),
+                  child: Text("Login", style: TextStyle(color: CupertinoColors.white
+                  ))),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextButton(
                     onPressed: null,
-                    child: Text("forgot_password"),
+                    child: Text("forgot_password",style: TextStyle(color: CupertinoColors.white),),
                   ),
                   TextButton(
                     onPressed: () {
@@ -136,7 +172,7 @@ class doctor_sign_in extends StatelessWidget {
                             builder: (context) => doctor_sign_up()),
                       );
                     },
-                    child: Text("Sign up"),
+                    child: Text("Sign up",style: TextStyle(color: CupertinoColors.white),),
                   )
                 ],
               ),

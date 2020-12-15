@@ -69,7 +69,7 @@ class _patient_profileState extends State<patient_profile> {
               ]),
               boxShadow: [
                 new BoxShadow(
-                  color: Colors.grey[500],
+                  color: Colors.blue,
                   blurRadius: 20.0,
                   spreadRadius: 1.0,
                 )

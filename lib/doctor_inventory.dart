@@ -48,11 +48,15 @@ class _doctor_inventoryState extends State<doctor_inventory> {
       drawer: nav_drawer(),
       appBar: new PreferredSize(
         child: new Container(
+
           padding: new EdgeInsets.only(top: MediaQuery.of(context).padding.top),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
-              children: [
+              children: [IconButton(
+
+                  icon: Icon(Icons.more_vert,color: CupertinoColors.white,),
+                  onPressed: (){nav_drawer();}),
                 SizedBox(
                   width: 5,
                 ),
@@ -60,18 +64,18 @@ class _doctor_inventoryState extends State<doctor_inventory> {
                   shape: new RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(80.0)),
                   onPressed: () {},
-                  color: Colors.white,
-                  padding: EdgeInsets.fromLTRB(40, 10, 40, 10),
+                  color: Color(0xFF3C4043),
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                   child: Row(
                     children: [
                       Text("Search for Patient with name",
-                          style: TextStyle(color: Colors.blueAccent)),
+                          style: TextStyle(color:Color(0XFFDCDDE1),)),
                       SizedBox(
                         width: 20,
                       ),
                       Icon(
                         Icons.search,
-                        color: Colors.blueAccent,
+                        color: CupertinoColors.white,
                       )
                     ],
                   ),
@@ -80,16 +84,17 @@ class _doctor_inventoryState extends State<doctor_inventory> {
                   width: 10,
                 ),
                 RaisedButton(
+                  color: Color(0xFF3C4043),
                   shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(80.0)),
+                      borderRadius: new BorderRadius.circular(70.0)),
                   onPressed: () {},
-                  color: Colors.white,
-                  padding: EdgeInsets.fromLTRB(2, 10, 2, 10),
+
+                  padding: EdgeInsets.fromLTRB(1, 10, 1, 10),
                   child: Row(
                     children: [
                       Icon(
                         Icons.filter_alt_outlined,
-                        color: Colors.blueAccent,
+                        color: CupertinoColors.white,
                       )
                     ],
                   ),
@@ -98,31 +103,39 @@ class _doctor_inventoryState extends State<doctor_inventory> {
             ),
           ),
           decoration: new BoxDecoration(
-              gradient: new LinearGradient(colors: [
-                Color(0xFF3DC9EE),
-                Color(0xFF78CFD9),
-                Color(0xFFBCE4E6),
-              ]),
+              color: Color(0xFF202125),
               boxShadow: [
                 new BoxShadow(
-                  color: Colors.grey[500],
+                  color: Colors.blue,
                   blurRadius: 20.0,
                   spreadRadius: 1.0,
-                )
+                ),
               ]),
         ),
         preferredSize: new Size(MediaQuery.of(context).size.width, 80.0),
       ),
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            MessagesStream(),
-          ],
+        child: Container(
+          decoration: const BoxDecoration(
+            color: Color(0xFF202125),
+          ),
+          child: Column(
+
+          //    color: Color(0xFF202125),
+
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              MessagesStream(),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
+        backgroundColor:Color(0XFF3C4043),
+        focusColor: Colors.blue,
+        focusElevation: 100,
+        splashColor: CupertinoColors.white,
         onPressed: () {
           Navigator.push(
             context,
@@ -131,7 +144,7 @@ class _doctor_inventoryState extends State<doctor_inventory> {
         },
         label: Text('Add Patient'),
         icon: Icon(Icons.add),
-        backgroundColor: Colors.blueAccent,
+
       ),
     );
   }
@@ -161,7 +174,12 @@ class MessagesStream extends StatelessWidget {
           final date = message.data['date'];
           final email = message.data['email'];
           String result = message.data['result'];
-          if (result == null) result = "pending";
+          String color;
+          if (result == null) {
+            result = "pending";
+
+          };
+
           final uid = message.data['doctor_uid'];
 
           final currentUser = loggedInUser.uid;
@@ -210,6 +228,7 @@ class MessageBubble extends StatelessWidget {
         );
       },
       child: Card(
+        color: Color(0XFF3E3F43),
         elevation: 15,
         shadowColor: Colors.blue,
         shape: RoundedRectangleBorder(
@@ -222,10 +241,16 @@ class MessageBubble extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Name: ${name}"),
-                  Text("Gender: ${gender}"),
-                  Text("Test Date: ${date}"),
-                  Text("COVID-19 Status: ${result}"),
+                  Text("Name: ${name}",style:TextStyle(color: CupertinoColors.white)),
+                  Text("Gender: ${gender}",style:TextStyle(color: CupertinoColors.white)),
+                  Text("Test Date: ${date}",style:TextStyle(color: CupertinoColors.white)),
+                  Row(
+                    children: [
+                      Text("COVID-19 Status:",style:TextStyle(color: CupertinoColors.white)),
+
+                      Text(" ${result}",style:TextStyle(color: Colors.yellow,fontWeight: FontWeight.bold)),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -239,7 +264,7 @@ class MessageBubble extends StatelessWidget {
                   elevation: 2,
                   radius: 50,
                 ),
-                Text("id:")
+                Text("id:",style:TextStyle(color: CupertinoColors.white))
               ],
             ),
           ],

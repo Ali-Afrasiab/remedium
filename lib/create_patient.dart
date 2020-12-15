@@ -10,18 +10,15 @@ import 'package:remedium/doctor_inventory.dart';
 import 'doctor_sign_in.dart';
 import 'package:intl/intl.dart';
 
-
 final _firestore = Firestore.instance;
 
-final DateTime now = DateTime. now();
+final DateTime now = DateTime.now();
 final DateFormat formatter = DateFormat('yyyy-MM-dd');
-final String formatted = formatter. format(now);
-
+final String formatted = formatter.format(now);
 
 class create_patient extends StatefulWidget {
   @override
   _create_patientState createState() => _create_patientState();
-
 }
 
 class _create_patientState extends State<create_patient> {
@@ -35,7 +32,6 @@ class _create_patientState extends State<create_patient> {
   String zip_code;
   String telephone;
   String condition;
-
 
   _imgFromCamera() async {
     File image = await ImagePicker.pickImage(
@@ -63,7 +59,6 @@ class _create_patientState extends State<create_patient> {
             child: Container(
               child: new Wrap(
                 children: <Widget>[
-
                   new ListTile(
                       leading: new Icon(Icons.photo_library),
                       title: new Text('Photo Library'),
@@ -96,9 +91,20 @@ class _create_patientState extends State<create_patient> {
           padding: new EdgeInsets.only(top: MediaQuery.of(context).padding.top),
           child: new Padding(
               padding:
-                  const EdgeInsets.only(left: 30.0, top: 20.0, bottom: 20.0),
+                  const EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0),
               child: Row(
-                children: [
+                children: [IconButton(
+
+                    icon: Icon(Icons.arrow_back,color: CupertinoColors.white,),
+                    onPressed: () {
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => doctor_inventory()),
+                      );
+                    }),
+
                   Column(
                     children: [
                       Text("Create Patient Profile!                      ",
@@ -111,42 +117,30 @@ class _create_patientState extends State<create_patient> {
                   ),
                 ],
               )),
-          decoration: new BoxDecoration(
-              gradient: new LinearGradient(colors: [
-                Color(0xFF3DC9EE),
-                Color(0xFF78CFD9),
-                Color(0xFFBCE4E6),
-              ]),
-              boxShadow: [
-                new BoxShadow(
-                  color: Colors.grey[500],
-                  blurRadius: 20.0,
-                  spreadRadius: 1.0,
-                )
-              ]),
+          decoration: new BoxDecoration(color: Color(0xFF202125), boxShadow: [
+            new BoxShadow(
+              color: Colors.blue,
+              blurRadius: 20.0,
+              spreadRadius: 1.0,
+            ),
+          ]),
         ),
         preferredSize: new Size(MediaQuery.of(context).size.width, 80.0),
       ),
       body: Container(
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: <Color>[
-              Color(0xFFC8EAF4),
-              Color(0xFFD5EAD7),
-              Color(0xFFFDFEFF),
-            ],
-          ),
+          color: Color(0xFF202125),
         ),
         child: Column(
           children: [
-            SizedBox(height:15),
+            SizedBox(height: 15),
             GestureDetector(
               onTap: () {
                 _showPicker(context);
               },
               child: CircleAvatar(
                 radius: 55,
-                backgroundColor: Color(0xffFDCF09),
+                backgroundColor: Colors.blueGrey,
                 child: _image != null
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(50),
@@ -177,35 +171,37 @@ class _create_patientState extends State<create_patient> {
                     padding: const EdgeInsets.all(5.0),
                     child: Text(
                         "Personal Information                                        ",
-                        style: TextStyle(fontSize: 20)),
+                        style: TextStyle(
+                            fontSize: 20, color: CupertinoColors.white)),
                   ),
                   Row(
                     children: [
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.all(12.0),
-                          child: TextField(
+                          child: TextField(style: TextStyle(color: Colors.white),
                             onChanged: (value) {
                               first_name = value;
                             },
                             decoration: new InputDecoration(
-                                border: new OutlineInputBorder(
-                                  borderRadius: const BorderRadius.all(
-                                    const Radius.circular(50.0),
-                                  ),
+                              border: new OutlineInputBorder(
+                                borderRadius: const BorderRadius.all(
+                                  const Radius.circular(50.0),
                                 ),
-                                filled: true,
-                                hintStyle:
-                                    new TextStyle(color: Colors.grey[800]),
-                                hintText: "First Name",
-                                fillColor: Colors.white),
+                              ),
+                              filled: true,
+                              hintStyle:
+                                  new TextStyle(color: Color(0XFFDCDDE1)),
+                              hintText: "First Name",
+                              fillColor: Color(0xFF3C4043),
+                            ),
                           ),
                         ),
                       ),
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.all(12.0),
-                          child: TextField(
+                          child: TextField(style: TextStyle(color: Colors.white),
                             onChanged: (value) {
                               last_name = value;
                             },
@@ -217,9 +213,9 @@ class _create_patientState extends State<create_patient> {
                                 ),
                                 filled: true,
                                 hintStyle:
-                                    new TextStyle(color: Colors.grey[800]),
-                                hintText: "Last Name",
-                                fillColor: Colors.white),
+                                new TextStyle(color: Color(0XFFDCDDE1)),
+                              hintText: "Last Name",
+                              fillColor: Color(0xFF3C4043),),
                           ),
                         ),
                       ),
@@ -230,7 +226,7 @@ class _create_patientState extends State<create_patient> {
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.all(12.0),
-                          child: TextField(
+                          child: TextField(style: TextStyle(color: Colors.white),
                             onChanged: (value) {
                               age = value;
                             },
@@ -242,9 +238,9 @@ class _create_patientState extends State<create_patient> {
                                 ),
                                 filled: true,
                                 hintStyle:
-                                    new TextStyle(color: Colors.grey[800]),
-                                hintText: "Age",
-                                fillColor: Colors.white),
+                                new TextStyle(color: Color(0XFFDCDDE1)),
+                              hintText: "Age",
+                              fillColor: Color(0xFF3C4043),),
                           ),
                         ),
                       ),
@@ -253,17 +249,17 @@ class _create_patientState extends State<create_patient> {
                           padding: const EdgeInsets.all(12.0),
                           child: DropdownButton(
                             onChanged: (value) {
-                              value == 1 ? gender = "male" : gender = "female";
+                              value == 1 ? gender = "Male" : gender = "Female";
                             },
                             hint: Text("gender"),
                             value: 1,
                             items: [
                               DropdownMenuItem(
-                                child: Text("Male"),
+                                child: Text("Male",style: TextStyle(color:CupertinoColors.white)),
                                 value: 1,
                               ),
                               DropdownMenuItem(
-                                child: Text("Female"),
+                                child: Text("Female",style: TextStyle(color:CupertinoColors.white)),
                                 value: 2,
                               ),
                             ],
@@ -282,14 +278,14 @@ class _create_patientState extends State<create_patient> {
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                         "Contact Info                                        ",
-                        style: TextStyle(fontSize: 24)),
+                        style: TextStyle(fontSize: 24,color:CupertinoColors.white,)),
                   ),
                   Row(
                     children: [
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.all(12.0),
-                          child: TextField(
+                          child: TextField(style: TextStyle(color: Colors.white),
                             onChanged: (value) {
                               email = value;
                             },
@@ -301,9 +297,9 @@ class _create_patientState extends State<create_patient> {
                                 ),
                                 filled: true,
                                 hintStyle:
-                                    new TextStyle(color: Colors.grey[800]),
-                                hintText: "Email",
-                                fillColor: Colors.white),
+                                new TextStyle(color: Color(0XFFDCDDE1)),
+                              hintText: "Email",
+                              fillColor: Color(0xFF3C4043),),
                           ),
                         ),
                       ),
@@ -314,7 +310,7 @@ class _create_patientState extends State<create_patient> {
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.all(12.0),
-                          child: TextField(
+                          child: TextField(style: TextStyle(color: Colors.white),
                             onChanged: (value) {
                               zip_code = value;
                             },
@@ -326,16 +322,16 @@ class _create_patientState extends State<create_patient> {
                                 ),
                                 filled: true,
                                 hintStyle:
-                                    new TextStyle(color: Colors.grey[800]),
-                                hintText: "Zip Code",
-                                fillColor: Colors.white),
+                                new TextStyle(color: Color(0XFFDCDDE1)),
+                              hintText: "Zip Code",
+                              fillColor: Color(0xFF3C4043),),
                           ),
                         ),
                       ),
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.all(12.0),
-                          child: TextField(
+                          child: TextField(style: TextStyle(color: Colors.white),
                             onChanged: (value) {
                               telephone = value;
                             },
@@ -347,9 +343,9 @@ class _create_patientState extends State<create_patient> {
                                 ),
                                 filled: true,
                                 hintStyle:
-                                    new TextStyle(color: Colors.grey[800]),
-                                hintText: "Telephone",
-                                fillColor: Colors.white),
+                                new TextStyle(color: Color(0XFFDCDDE1)),
+                              hintText: "Mobile number",
+                              fillColor: Color(0xFF3C4043),),
                           ),
                         ),
                       ),
@@ -359,7 +355,7 @@ class _create_patientState extends State<create_patient> {
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
-                        child: TextField(
+                        child: TextField(style: TextStyle(color: Colors.white),
                           onChanged: (value) {
                             condition = value;
                           },
@@ -371,10 +367,10 @@ class _create_patientState extends State<create_patient> {
                                 ),
                               ),
                               filled: true,
+                              hintStyle: new TextStyle(color: CupertinoColors.white),
+        hintText: "Pre-Diagnosis Condition:",
+        fillColor: Color(0xFF3C4043),),
 
-                              hintStyle: new TextStyle(color: Colors.grey[800]),
-                              hintText: "Pre-Diagnosis Condition:",
-                              fillColor: Colors.white),
                         ),
                       ),
                     ),
@@ -384,7 +380,7 @@ class _create_patientState extends State<create_patient> {
             ),
             Container(
               child: RaisedButton(
-                  color: Colors.blue,
+                  color: Color(0XFF3C4043),
                   padding: EdgeInsets.fromLTRB(80, 20, 80, 20),
                   shape: new RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(30.0)),
@@ -393,7 +389,7 @@ class _create_patientState extends State<create_patient> {
                       final FirebaseUser user = await _auth.currentUser();
                       final uid = user.uid;
                       _firestore.collection('patient').add({
-                        'doctor_uid' : uid,
+                        'doctor_uid': uid,
                         'first_name': first_name,
                         'email': email,
                         'last_name': last_name,
@@ -414,7 +410,7 @@ class _create_patientState extends State<create_patient> {
                       print(e);
                     }
                   },
-                  child: Text("Submit", style: TextStyle(color: Colors.white))),
+                  child: Text("Submit", style: TextStyle(color: CupertinoColors.white))),
             ),
           ],
         ),

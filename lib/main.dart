@@ -81,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: new Text(
                 'Welcome to Remedium',
                 style: new TextStyle(
-                    fontSize: 20.0,
+                    fontSize: 23.0,
                     fontWeight: FontWeight.w500,
                     color: Colors.white
                 ),
@@ -89,19 +89,15 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           decoration: new BoxDecoration(
-              gradient: new LinearGradient(
-                  colors: [
-                    Color(0xFF3DC9EE),
-                    Color(0xFF78CFD9),
-                    Color(0xFFBCE4E6),
-                  ]
-              ),
+
+                  color: Color(0xFF202125),
+
               boxShadow: [
                 new BoxShadow(
-                  color: Colors.grey[500],
+                  color: Colors.blue,
                   blurRadius: 20.0,
                   spreadRadius: 1.0,
-                )
+                ),
               ]
           ),
         ),
@@ -112,28 +108,25 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
 
       body:
-      Container(decoration: const BoxDecoration(gradient: LinearGradient(
-        colors: <Color>[
-          Color(0xFFC8EAF4),
-          Color(0xFFD5EAD7),
-          Color(0xFFFDFEFF),
+      Container(decoration: const BoxDecoration(
+        color: Color(0xFF202125),
 
-        ],
-      ),
       ),
         child: Center(
           child: Column(
 
           children: [
+            SizedBox(height: 120,),
             Expanded(
                 flex: 1,
+
                 child: Center(
                   child: Container(
-
-                      child:Text("SIGN IN AS",style: TextStyle(fontSize: 25),)),
+                        height: 25,
+                      child:Text("SIGN IN AS",style: TextStyle(fontSize: 25,color: Colors.white),)),
                 )),
             Expanded(
-              flex: 2,
+              flex: 3,
               child: Container(
                 child: Column(
                   children: [
@@ -144,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           context,
                           MaterialPageRoute(builder: (context) => doctor_sign_in()),
                         );},
-                        color: Colors.blue,
+                        color: Color(0xFF3C4043),
 
 
                         padding: EdgeInsets.fromLTRB(80, 20, 80, 20),
@@ -156,7 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       height: 20,
                     ),
                     RaisedButton(
-                        color: Colors.blue,
+                        color: Color(0xFF3C4043),
                         padding: EdgeInsets.fromLTRB(80, 20, 80, 20),
                         shape:  new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                         onPressed:(){},
