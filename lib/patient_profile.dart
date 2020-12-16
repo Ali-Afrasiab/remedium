@@ -3,29 +3,32 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:remedium/covid.dart';
 import 'package:remedium/doctor_inventory.dart';
+import 'package:remedium/report_generate.dart';
+import 'package:remedium/test.dart';
 
 import 'doctor_sign_in.dart';
 
 final _firestore = Firestore.instance;
 
+
 class patient_profile extends StatefulWidget {
-  final recieved_date;
-  patient_profile({this.recieved_date});
-   void get_date(){
-     print(recieved_date);
+  final pass_email;
+  patient_profile({this.pass_email});
 
-
-  }
   @override
-  _patient_profileState createState() => _patient_profileState();
+  _patient_profileState createState() => _patient_profileState(recieved_email: pass_email);
 }
-
 
 class _patient_profileState extends State<patient_profile> {
   final _auth = FirebaseAuth.instance;
+  _patient_profileState({this.recieved_email});
+  final String recieved_email;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -34,46 +37,38 @@ class _patient_profileState extends State<patient_profile> {
       resizeToAvoidBottomInset: false,
       appBar: new PreferredSize(
         child: new Container(
-          padding: new EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-          child: new Padding(
-              padding:
-                  const EdgeInsets.only(left: 30.0, top: 15.0, bottom: 5.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  FlatButton(
-                   onPressed : (){Navigator.push(
-                     context,
-                     MaterialPageRoute(
-                         builder: (context) => doctor_inventory()),
-                   );},
-                    child: Icon(
-                      Icons.backspace_outlined,
-                      color: Colors.blueAccent,
-                    ),
-                  ),
-                  Column(
-                    children: [
+          //padding: new EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+          padding:  EdgeInsets.all(20),
+          child: Row(
 
-                      Text("Patient Profile",
-                          style: TextStyle(fontSize: 20, color: Colors.white)),
-                    ],
-                  ),
-                ],
-              )),
+            children: [
+              IconButton(
+
+                  icon: Icon(Icons.arrow_back,color: CupertinoColors.white,),
+                  onPressed: () {
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>doctor_inventory()),
+                    );
+                  }),
+              Text("Patient Profile",
+                  style: TextStyle(fontSize: 20, color: Colors.white)),
+            ],
+          ),
           decoration: new BoxDecoration(
-              gradient: new LinearGradient(colors: [
-                Color(0xFF3DC9EE),
-                Color(0xFF78CFD9),
-                Color(0xFFBCE4E6),
-              ]),
+
+              color: Color(0xFF202125),
+
               boxShadow: [
                 new BoxShadow(
                   color: Colors.blue,
                   blurRadius: 20.0,
                   spreadRadius: 1.0,
-                )
-              ]),
+                ),
+              ]
+          ),
         ),
         preferredSize: new Size(MediaQuery.of(context).size.width, 50.0),
       ),
@@ -83,17 +78,36 @@ class _patient_profileState extends State<patient_profile> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
 
-            MessagesStream(),
+            MessagesStream(recieved: recieved_email),
 
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor:Color(0XFF3C4043),
+        focusColor: Colors.blue,
+        focusElevation: 100,
+        splashColor: CupertinoColors.white,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => report_generate()),
+          );
+        },
+        label: Text('Create Report'),
+        icon: Icon(Icons.add),
 
+      ),
     );
   }
 }
 
 class MessagesStream extends StatelessWidget {
+  MessagesStream({this.recieved});
+
+
+  final String recieved;
+
  String email;
  String first_name;
  String last_name;
@@ -102,6 +116,8 @@ class MessagesStream extends StatelessWidget {
  String telephone;
  String result;
  String age;
+ String date;
+ Color colour;
 
 
   @override
@@ -119,11 +135,11 @@ class MessagesStream extends StatelessWidget {
           );
         }
         final messages = snapshot.data.documents;
-        List<MessageBubble> messageBubbles = [];
-
+       // List<MessageBubble> messageBubbles = [];
+print(recieved);
         for (var message in messages) {
 
-          if(message.data['email']== 'ali@gmail.com')
+          if(message.data['email']== recieved)
             {  email = message.data['email'];
          first_name =message.data['first_name'];
             last_name =message.data['last_name'];
@@ -132,8 +148,19 @@ class MessagesStream extends StatelessWidget {
           //final date = message.data['date'];
           telephone = message.data['telephone'];
             age = message.data['age'];
+            date = message.data['date'];
            result = message.data['result'];
-          if(result==null) result="pending";
+
+
+          if(result==null) {
+            result="pending";
+            colour =Colors.yellowAccent;
+          }
+          if(result=="negative") {
+            colour= Colors.green ;
+          }
+            if(result=="positive")colour= Colors.red;
+
 
 
 
@@ -143,135 +170,173 @@ class MessagesStream extends StatelessWidget {
 
           }
         }
+
         return Expanded(
           child: Container(
             decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: <Color>[
-                  Color(0xFFC8EAF4),
-                  Color(0xFFD5EAD7),
-                  Color(0xFFFDFEFF),
-                ],
-              ),
+              color: Color(0xFF202125),
             ),
             child: Column(
-
-
               children: [
                 Center(
                   child: Column(
                     children: [
                       SizedBox(height: 10,),
-                      GestureDetector(
-                        child: CircleAvatar(
-                          radius: 55,
-                          backgroundColor: Color(0xffFDCF09),
-                          child: Icon(
-                            Icons.camera_alt,
-                            color: Colors.grey[800],
-                          ),
+                      Card(
+
+
+                        color: Color(0XFF3E3F43),
+                        elevation: 10,
+                        //shadowColor: Colors.blue,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        child: Row(
+
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(40.0),
+                              child: GestureDetector(
+                                child: CircleAvatar(
+                                  radius: 55,
+                                  backgroundColor: Color(0xffFDCF09),
+                                  child: Icon(
+                                    Icons.camera_alt,
+                                    color: Colors.grey[800],
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(30, 10, 10, 20),
+                              child: Card(
+
+                                color: Color(0XFF3E3F43),
+                               // elevation: 50,
+
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text("Name : ",style:TextStyle(color: Colors.white70),),
+                                        Text("${first_name} ${last_name}",style:TextStyle(color: CupertinoColors.white,fontWeight: FontWeight.bold,fontSize: 18),),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text("Gender : ",style:TextStyle(color: Colors.white70),),
+                                        Text("${gender}",style:TextStyle(color: CupertinoColors.white,fontWeight: FontWeight.bold,fontSize: 18),),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text("Age : ",style:TextStyle(color: Colors.white70),),
+                                        Text("${age}",style:TextStyle(color: CupertinoColors.white,fontWeight: FontWeight.bold,fontSize: 18),),
+                                      ],
+                                    ),
+
+                                  ],
+                                ),
+
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      Text("${first_name} ${last_name}",style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,),),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 30,),
-                Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Column(
-                            children: [
-                              Text("Age", style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,color: Colors.black45),),
-                              Text("${age}", style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,),),
-                            ],
+                      SizedBox(height: 30,),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        child: Card(
+
+                          color: Color(0XFF3E3F43),
+                          elevation: 10,
+
+                          //shadowColor: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25.0),
                           ),
-                          Column(
+                          child: Row(
                             children: [
-                              Text("Gender ",style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,color: Colors.black45),),
-                              Text(gender, style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,),),
+                              Padding(
+                                padding: const EdgeInsets.all(30.0),
+                                child: Column(
+
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text("Email : ",style:TextStyle(color: Colors.white70),),
+                                        Text("${email}",style:TextStyle(color: CupertinoColors.white,fontWeight: FontWeight.bold,fontSize: 18),),
+                                      ],
+                                    ),
+                                    Row
+                                        (
+                                      children: [
+                                        Text("Phone : ",style:TextStyle(color: Colors.white70),),
+                                        Text("${telephone}",style:TextStyle(color: CupertinoColors.white,fontWeight: FontWeight.bold,fontSize: 18),),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text("Date : ",style:TextStyle(color: Colors.white70),),
+                                        Text("${date}",style:TextStyle(color: CupertinoColors.white,fontWeight: FontWeight.bold,fontSize: 18),),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
 
-                        ],
+                        ),
                       ),
-                      SizedBox(height: 50,),
-                      Row (
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Column(
-                            children: [
-                              Text("Email", style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,color: Colors.black45),),
-                              Text(email, style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,),),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Text("Phone",style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,color: Colors.black45),),
-                              Text(telephone, style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,),),
-                            ],
-                          ),
 
-                        ],
-                      ),
-                      SizedBox(height: 50
-                        ,),
                       Column(
 
                         children: [
-                          Text("Pre-Diagnosis Condition: ",style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,color: Colors.black45),),
+                          Text("Pre-Diagnosis Condition: ",style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,color: CupertinoColors.white),),
                         ],
                       ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        child: Card(
+
+                          color: Color(0XFF3E3F43),
+                          elevation: 10,
+
+                          //shadowColor: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text("${condition}",style:TextStyle(fontSize: 18,color: CupertinoColors.white)),
+                          ),
+
+                        ),
+                      ),
+                      SizedBox(height: 30,),
                       Column(
-                        children: <Widget>[
-                          Card(
-                              color: Colors.white,
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(condition,style:TextStyle(fontSize: 16),),
-                              )
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("STATUS: ",style:TextStyle(fontSize: 20,color: CupertinoColors.white) ),
+                              Text("${result}",style:TextStyle(fontSize: 20,color: colour) ),
+                            ],
                           )
                         ],
-                      ),SizedBox(height: 50
-                        ,),
-                      Row(
-
-
-                        children: [
-                          Text("Status: ",style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,),),
-                          Text(result,style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,color: Colors.red),),
-                        ],
                       ),
+
+
                     ],
                   ),
                 ),
-                SizedBox(height:15),
-
-
-                Container(
-
-                  child: Column(
-
-                    children: [
-                      RaisedButton(
-                          onPressed: (){
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => covid()),
-                            );},
-                          color: Colors.blue,
-                          padding: EdgeInsets.fromLTRB(80, 20, 80, 20),
-                          shape:  new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-
-                          child: Text("Create Report",style:TextStyle(color: Colors.white))),
-                    ],
-                  ),
-                ),],
+                ],
             ),
           )
         );
@@ -283,132 +348,4 @@ class MessagesStream extends StatelessWidget {
 }
 
 
-class MessageBubble extends StatelessWidget {
-  MessageBubble({this.email,this.name, this.gender,this.result,this.telephone,this.condition,this.age });
 
-  String email;
-
-
-  String name;
-  String age;
-  String gender;
-  String result;
-  String telephone;
-
-  String condition;
-
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: <Color>[
-            Color(0xFFC8EAF4),
-            Color(0xFFD5EAD7),
-            Color(0xFFFDFEFF),
-          ],
-        ),
-      ),
-      child: Column(
-
-
-        children: [
-          Center(
-            child: Column(
-              children: [
-                SizedBox(height: 10,),
-                GestureDetector(
-                  child: CircleAvatar(
-                    radius: 55,
-                    backgroundColor: Color(0xffFDCF09),
-                    child: Icon(
-                      Icons.camera_alt,
-                      color: Colors.grey[800],
-                    ),
-                  ),
-                ),
-                Text("Name",style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,),),
-              ],
-            ),
-          ),
-          SizedBox(height: 30,),
-          Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text("Age: ${age}", style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,),),
-                    Text("Gender: ${gender}",style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,),),
-
-                  ],
-                ),
-                SizedBox(height: 50,),
-                Row (
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text("Email: ${email}", style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,),),
-                    Text("Telephone: ${telephone}",style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,),),
-
-                  ],
-                ),
-                SizedBox(height: 50
-                  ,),
-                Column(
-
-                  children: [
-                    Text("Pre-Diagnosis Condition: ${condition}",style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,),),
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    Card(
-                        color: Colors.white,
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text("",style:TextStyle(fontSize: 16),),
-                        )
-                    )
-                  ],
-                ),SizedBox(height: 50
-                  ,),
-                Column(
-
-
-                  children: [
-                    Text("Status: ${result}",style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,),),
-                  ],
-                ),
-              ],
-            ),
-          ),
-
-
-
-          Container(
-
-            child: Column(
-
-              children: [
-                RaisedButton(
-                    onPressed: (){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => covid()),
-                      );},
-                    color: Colors.blue,
-                    padding: EdgeInsets.fromLTRB(80, 20, 80, 20),
-                    shape:  new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-
-                    child: Text("Create Report",style:TextStyle(color: Colors.white))),
-              ],
-            ),
-          ),],
-      ),
-    );
-  }
-}

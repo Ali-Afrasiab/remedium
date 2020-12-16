@@ -223,7 +223,7 @@ class MessageBubble extends StatelessWidget {
           context,
           MaterialPageRoute(
               builder: (context) => patient_profile(
-                    recieved_date: email,
+                    pass_email: email,
                   )),
         );
       },

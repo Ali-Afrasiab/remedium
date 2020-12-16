@@ -1,56 +1,87 @@
-import 'package:circular_profile_avatar/circular_profile_avatar.dart';
+//Caution: Only works on Android & iOS platforms
 import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
+
+//void main() => runApp(test());
+
 class test extends StatelessWidget {
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      /*onPressed: (){Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => patient_profile()),
-      );}*//*,*/
-      child: Card(
-
-        elevation: 15,
-        shadowColor: Colors.blue,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(25.0),
-        ),
-        child: Row(
-
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(55.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Name "),
-                  Text("Gender"),
-                  Text("Test Date: "),
-                  Text("COVID-19 Status :"),
-                  Text("Pre-Diagnosed Conditions:"),
-                ],
-              ),
-            ),
-            Column(
-              children: [
-                CircularProfileAvatar(
-                  '',
-                  child: FlutterLogo(),
-                  borderColor: Colors.purpleAccent,
-                  borderWidth: 5,
-                  elevation: 2,
-                  radius: 50,
-                ),
-                Text("id:")
-              ],
-            ),
-          ],
-        ),
+    return MaterialApp(
+      title: 'Firebase Storage Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
+      home: UploadingImageToFirebaseStorage(),
     );
   }
 }
 
-class StatelessWidget {
+final Color yellow = Color(0xfffbc31b);
+final Color orange = Color(0xfffb6900);
+
+class UploadingImageToFirebaseStorage extends StatefulWidget {
+  @override
+  _UploadingImageToFirebaseStorageState createState() =>
+      _UploadingImageToFirebaseStorageState();
+}
+
+class _UploadingImageToFirebaseStorageState
+    extends State<UploadingImageToFirebaseStorage> {
+
+
+  ///NOTE: Only supported on Android & iOS
+
+
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: <Widget>[
+          Container(
+            height: 360,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(50.0),
+                    bottomRight: Radius.circular(50.0)),
+                gradient: LinearGradient(
+                    colors: [orange, yellow],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight)),
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 80),
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: Text(
+                      "Uploading Image to Firebase Storage",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 28,
+                          fontStyle: FontStyle.italic),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20.0),
+
+
+            ]),
+          ),
+        ],
+      ),
+    );
+  }
+
+
 }

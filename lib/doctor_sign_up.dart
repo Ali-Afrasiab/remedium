@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -79,9 +80,26 @@ class _doctor_sign_upState extends State<doctor_sign_up> {
         }
     );
   }
+
+ /* Future uploadFile() async {
+    StorageReference storageReference = FirebaseStorage.instance
+        .ref()
+        .child('doctor_profile/${_image.path}');
+    StorageUploadTask uploadTask = storageReference.putFile(_image);
+    await uploadTask.onComplete;
+    print('File Uploaded');
+    storageReference.getDownloadURL().then((fileURL) {
+      setState(() {
+        _uploadedFileURL = fileURL;
+      });
+    });
+  }
+*/
+
   @override
   Widget build(BuildContext context) {
     var _value;
+    String  _uploadedFileURL;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: new PreferredSize(
@@ -144,13 +162,15 @@ class _doctor_sign_upState extends State<doctor_sign_up> {
                 radius: 55,
                 backgroundColor: Colors.blueGrey,
                 child: _image != null
-                    ? ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
+                    ? ClipOval(
+
+                  //borderRadius: BorderRadius.circular(30),
                   child: Image.file(
-                    _image,
-                    width: 100,
+                    _image, width: 100,
                     height: 100,
-                    fit: BoxFit.fitHeight,
+                    fit: BoxFit.cover,
+
+                   // fit: BoxFit.contain,
                   ),
                 )
                     : Container(
@@ -456,11 +476,10 @@ class _doctor_sign_upState extends State<doctor_sign_up> {
                       'telephone': telephone,
                       'degree': degree,
                       'experience': experience,
-
-
                     });
 
-                final newUser = await _auth.createUserWithEmailAndPassword(email: email , password: password);
+
+                  final newUser = await _auth.createUserWithEmailAndPassword(email: email , password: password);
                   if(newUser !=null)
                     Navigator.push(
                       context,

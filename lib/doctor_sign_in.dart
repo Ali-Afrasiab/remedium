@@ -54,7 +54,7 @@ class doctor_sign_in extends StatelessWidget {
               color: Color(0xFF202125),
               boxShadow: [
                 new BoxShadow(
-                  color: Colors.blueGrey,
+                  color: Colors.blue,
                   blurRadius: 20.0,
                   spreadRadius: 1.0,
                 ),

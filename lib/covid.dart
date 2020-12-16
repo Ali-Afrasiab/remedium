@@ -1,6 +1,9 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:remedium/patient_profile.dart';
+import 'package:remedium/report_generate.dart';
 import 'package:tflite/tflite.dart';
 
 
@@ -30,15 +33,60 @@ class _covidState extends State<covid> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Teachable Machine Learning'),
+      appBar:  new PreferredSize(
+        child: new Container(
+          //padding: new EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+          padding:  EdgeInsets.all(30),
+          child: Row(
+
+            children: [
+              IconButton(
+
+                  icon: Icon(Icons.arrow_back,color: CupertinoColors.white,),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => report_generate(
+                            pass_result: _outputs[0]["label"]
+                        ),),
+                    );
+
+                  }),
+              Padding(
+                padding: const EdgeInsets.only(top: 5),
+                child: Text("Covid-19 X-Ray Image Diagnosis",
+                    style: TextStyle(fontSize: 20, color: Colors.white)),
+              ),
+            ],
+          ),
+          decoration: new BoxDecoration(
+
+              color: Color(0xFF202125),
+
+              boxShadow: [
+                new BoxShadow(
+                  color: Colors.blue,
+                  blurRadius: 20.0,
+                  spreadRadius: 1.0,
+                ),
+              ]
+          ),
+        ),
+        preferredSize: new Size(MediaQuery.of(context).size.width, 65.0),
       ),
       body: _loading
           ? Container(
+        decoration: const BoxDecoration(
+          color: Color(0xFF202125),
+        ),
         alignment: Alignment.center,
         child: CircularProgressIndicator(),
       )
           : Container(
+        decoration: const BoxDecoration(
+          color: Color(0xFF202125),
+        ),
         width: MediaQuery.of(context).size.width,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -49,19 +97,41 @@ class _covidState extends State<covid> {
               height: 20   ,
             ),
             _outputs != null
-                ? Text(
+                ? Column(
+                  children: [
+                    Text(
               "${_outputs[0]["label"]}",
               style: TextStyle(
-                color: Colors.black,
-                fontSize: 20.0,
-                background: Paint()..color = Colors.white,
+                    color: CupertinoColors.white,
+                    fontSize: 20.0,
+
               ),
-            )
-                : Container()
+            ),RaisedButton(
+                      color: Colors.blueGrey,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25.0)),
+                      onPressed: (){Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => report_generate(
+                              pass_result: _outputs[0]["label"]
+                            ),),
+                      );},
+                      child: Text("Return to report creation",style:TextStyle(color:CupertinoColors.white)),
+                    ),
+                  ],
+                )
+                : Container(
+              decoration: const BoxDecoration(
+                color: Color(0xFF202125),
+              ),
+            ),
           ],
         ),
       ),
+
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blueGrey,
         onPressed: pickImage,
         child: Icon(Icons.image),
       ),

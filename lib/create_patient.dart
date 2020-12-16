@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gender_selector/gender_selector.dart';
@@ -142,15 +143,17 @@ class _create_patientState extends State<create_patient> {
                 radius: 55,
                 backgroundColor: Colors.blueGrey,
                 child: _image != null
-                    ? ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: Image.file(
-                          _image,
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.fitHeight,
-                        ),
-                      )
+                    ? ClipOval(
+
+                  //borderRadius: BorderRadius.circular(30),
+                  child: Image.file(
+                    _image, width: 100,
+                    height: 100,
+                    fit: BoxFit.cover,
+
+                    // fit: BoxFit.contain,
+                  ),
+                )
                     : Container(
                         decoration: BoxDecoration(
                             color: Colors.grey[200],
@@ -400,6 +403,9 @@ class _create_patientState extends State<create_patient> {
                         'condition': condition,
                         'date': formatted,
                       });
+                      StorageReference storageReference =
+                      FirebaseStorage.instance.ref().child("doctor_profile/$_image");
+                      print(_image);
 
                       Navigator.push(
                         context,
