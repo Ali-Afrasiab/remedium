@@ -31,6 +31,7 @@ class _doctor_sign_upState extends State<doctor_sign_up> {
   String telephone;
   String degree;
   String experience;
+  String description;
 
   _imgFromCamera() async {
     File image = await ImagePicker.pickImage(
@@ -148,62 +149,65 @@ class _doctor_sign_upState extends State<doctor_sign_up> {
         ),
         preferredSize: new Size(MediaQuery.of(context).size.width, 80.0),
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          color: Color(0xFF202125),
-        ),
-        child: Column(
-          children: [
-            GestureDetector(
-              onTap: () {
-                _showPicker(context);
-              },
-              child: CircleAvatar(
-                radius: 55,
-                backgroundColor: Colors.blueGrey,
-                child: _image != null
-                    ? ClipOval(
+      body: Center(
+        child: Container(
+          decoration: const BoxDecoration(
+            color: Color(0xFF202125),
+          ),
+          child: ListView(
 
-                  //borderRadius: BorderRadius.circular(30),
-                  child: Image.file(
-                    _image, width: 100,
+
+            children: [
+              GestureDetector(
+                onTap: () {
+                  _showPicker(context);
+                },
+                child: CircleAvatar(
+                  radius: 55,
+                  backgroundColor: Colors.blueGrey,
+                  child: _image != null
+                      ? ClipOval(
+
+                    //borderRadius: BorderRadius.circular(30),
+                    child: Image.file(
+                      _image, width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+
+                      // fit: BoxFit.contain,
+                    ),
+                  )
+                      : Container(
+                    decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(50)),
+                    width: 100,
                     height: 100,
-                    fit: BoxFit.cover,
-
-                   // fit: BoxFit.contain,
-                  ),
-                )
-                    : Container(
-                  decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(50)),
-                  width: 100,
-                  height: 100,
-                  child: Icon(
-                    Icons.camera_alt,
-                    color: Colors.grey[800],
+                    child: Icon(
+                      Icons.camera_alt,
+                      color: Colors.grey[800],
+                    ),
                   ),
                 ),
               ),
-            ),
-            Container(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Text("Personal Information                                        ",
-                        style: TextStyle(fontSize: 20,color: CupertinoColors.white)),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: TextField(style: TextStyle(color: Colors.white),
-                            onChanged: (value){
-                              first_name=value;
-                            },
-                            decoration: new InputDecoration(
+              Container(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Text("Personal Information                                        ",
+                          style: TextStyle(fontSize: 20,color: CupertinoColors.white)),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: TextField(style: TextStyle(color: Colors.white),
+                              onChanged: (value){
+                                first_name=value;
+                              },
+                              decoration: new InputDecoration(
                                 border: new OutlineInputBorder(
                                   borderRadius: const BorderRadius.all(
                                     const Radius.circular(50.0),
@@ -214,18 +218,18 @@ class _doctor_sign_upState extends State<doctor_sign_up> {
                                 hintStyle:
                                 new TextStyle(color: Color(0XFFDCDDE1)),
                                 hintText: "First Name",
-                                 fillColor: Color(0xFF3C4043),),
+                                fillColor: Color(0xFF3C4043),),
+                            ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: TextField(style: TextStyle(color: Colors.white),
-                            onChanged: (value){
-                              last_name=value;
-                            },
-                            decoration: new InputDecoration(
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: TextField(style: TextStyle(color: Colors.white),
+                              onChanged: (value){
+                                last_name=value;
+                              },
+                              decoration: new InputDecoration(
                                 border: new OutlineInputBorder(
                                   borderRadius: const BorderRadius.all(
                                     const Radius.circular(50.0),
@@ -236,23 +240,23 @@ class _doctor_sign_upState extends State<doctor_sign_up> {
                                 new TextStyle(color: Color(0XFFDCDDE1)),
                                 hintText: "Last Name",
 
-                              fillColor: Color(0xFF3C4043),
-                                ),
+                                fillColor: Color(0xFF3C4043),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: TextField(style: TextStyle(color: Colors.white),
-                            onChanged: (value){
-                              age=value;
-                            },
-                            decoration: new InputDecoration(
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: TextField(style: TextStyle(color: Colors.white),
+                              onChanged: (value){
+                                age=value;
+                              },
+                              decoration: new InputDecoration(
                                 border: new OutlineInputBorder(
                                   borderRadius: const BorderRadius.all(
                                     const Radius.circular(50.0),
@@ -260,20 +264,20 @@ class _doctor_sign_upState extends State<doctor_sign_up> {
                                 ),
                                 filled: true,
                                 hintStyle:
-                               new TextStyle(color: Color(0XFFDCDDE1)),
+                                new TextStyle(color: Color(0XFFDCDDE1)),
                                 hintText: "Age",
-                                 fillColor: Color(0xFF3C4043),
+                                fillColor: Color(0xFF3C4043),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child:DropdownButton(
-                            iconDisabledColor:Color(0xFF3C4043),
-                            onChanged: (value) {value==1?gender="male":gender="female";},
-                            hint: Text("gender"),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child:DropdownButton(
+                              iconDisabledColor:Color(0xFF3C4043),
+                              onChanged: (value) {value==1?gender="male":gender="female";},
+                              hint: Text("gender"),
                               value: 1,
 
                               items: [
@@ -287,32 +291,32 @@ class _doctor_sign_upState extends State<doctor_sign_up> {
                                 ),
 
                               ],
-                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Container(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text("Contact Info                                        ",
-                        style: TextStyle(fontSize: 24,color: CupertinoColors.white)),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: TextField(style: TextStyle(color: Colors.white),
-                            onChanged: (value){
-                              password=value;
-                            },
-                            decoration: new InputDecoration(
+              Container(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text("Contact Info                                        ",
+                          style: TextStyle(fontSize: 24,color: CupertinoColors.white)),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: TextField(style: TextStyle(color: Colors.white),
+                              onChanged: (value){
+                                password=value;
+                              },
+                              decoration: new InputDecoration(
                                 border: new OutlineInputBorder(
                                   borderRadius: const BorderRadius.all(
                                     const Radius.circular(50.0),
@@ -320,20 +324,20 @@ class _doctor_sign_upState extends State<doctor_sign_up> {
                                 ),
                                 filled: true,
                                 hintStyle:
-                               new TextStyle(color: Color(0XFFDCDDE1)),
+                                new TextStyle(color: Color(0XFFDCDDE1)),
                                 hintText: "Password",
-                                 fillColor: Color(0xFF3C4043),),
+                                fillColor: Color(0xFF3C4043),),
+                            ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: TextField(style: TextStyle(color: Colors.white),
-                            onChanged: (value){
-                              email=value;
-                            },
-                            decoration: new InputDecoration(
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: TextField(style: TextStyle(color: Colors.white),
+                              onChanged: (value){
+                                email=value;
+                              },
+                              decoration: new InputDecoration(
                                 border: new OutlineInputBorder(
                                   borderRadius: const BorderRadius.all(
                                     const Radius.circular(50.0),
@@ -341,27 +345,27 @@ class _doctor_sign_upState extends State<doctor_sign_up> {
                                 ),
                                 filled: true,
                                 hintStyle:
-                               new TextStyle(color: Color(0XFFDCDDE1)),
+                                new TextStyle(color: Color(0XFFDCDDE1)),
                                 hintText: "Email",
-                                 fillColor: Color(0xFF3C4043),),
+                                fillColor: Color(0xFF3C4043),),
 
 
 
 
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: TextField(style: TextStyle(color: Colors.white),onChanged: (value){
-                            zip_code=value;
-                          },
-                            decoration: new InputDecoration(
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: TextField(style: TextStyle(color: Colors.white),onChanged: (value){
+                              zip_code=value;
+                            },
+                              decoration: new InputDecoration(
                                 border: new OutlineInputBorder(
                                   borderRadius: const BorderRadius.all(
                                     const Radius.circular(50.0),
@@ -369,19 +373,19 @@ class _doctor_sign_upState extends State<doctor_sign_up> {
                                 ),
                                 filled: true,
                                 hintStyle:
-                               new TextStyle(color: Color(0XFFDCDDE1)),
+                                new TextStyle(color: Color(0XFFDCDDE1)),
                                 hintText: "Zip Code",
-                                 fillColor: Color(0xFF3C4043),),
+                                fillColor: Color(0xFF3C4043),),
+                            ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child:TextField(style: TextStyle(color: Colors.white),onChanged: (value){
-                            telephone=value;
-                          },
-                            decoration: new InputDecoration(
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child:TextField(style: TextStyle(color: Colors.white),onChanged: (value){
+                              telephone=value;
+                            },
+                              decoration: new InputDecoration(
                                 border: new OutlineInputBorder(
                                   borderRadius: const BorderRadius.all(
                                     const Radius.circular(50.0),
@@ -389,35 +393,35 @@ class _doctor_sign_upState extends State<doctor_sign_up> {
                                 ),
                                 filled: true,
                                 hintStyle:
-                               new TextStyle(color: Color(0XFFDCDDE1)),
+                                new TextStyle(color: Color(0XFFDCDDE1)),
                                 hintText: "Telephone",
-                                 fillColor: Color(0xFF3C4043),),
+                                fillColor: Color(0xFF3C4043),),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Container(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text("Qualifications                                        ",
-                        style: TextStyle(fontSize: 24,color: CupertinoColors.white)),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: TextField(style: TextStyle(color: Colors.white),
-                            onChanged: (value){
-                              degree=value;
-                            },
-                            decoration: new InputDecoration(
+              Container(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text("Qualifications                                        ",
+                          style: TextStyle(fontSize: 24,color: CupertinoColors.white)),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: TextField(style: TextStyle(color: Colors.white),
+                              onChanged: (value){
+                                degree=value;
+                              },
+                              decoration: new InputDecoration(
                                 border: new OutlineInputBorder(
                                   borderRadius: const BorderRadius.all(
                                     const Radius.circular(50.0),
@@ -425,20 +429,20 @@ class _doctor_sign_upState extends State<doctor_sign_up> {
                                 ),
                                 filled: true,
                                 hintStyle:
-                               new TextStyle(color: Color(0XFFDCDDE1)),
+                                new TextStyle(color: Color(0XFFDCDDE1)),
                                 hintText: "Degree",
-                                 fillColor: Color(0xFF3C4043),),
+                                fillColor: Color(0xFF3C4043),),
+                            ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: TextField(style: TextStyle(color: Colors.white),
-                            onChanged: (value){
-                              experience=value;
-                            },
-                            decoration: new InputDecoration(
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: TextField(style: TextStyle(color: Colors.white),
+                              onChanged: (value){
+                                experience=value;
+                              },
+                              decoration: new InputDecoration(
                                 border: new OutlineInputBorder(
                                   borderRadius: const BorderRadius.all(
                                     const Radius.circular(50.0),
@@ -446,50 +450,70 @@ class _doctor_sign_upState extends State<doctor_sign_up> {
                                 ),
                                 filled: true,
                                 hintStyle:
-                               new TextStyle(color: Color(0XFFDCDDE1)),
+                                new TextStyle(color: Color(0XFFDCDDE1)),
                                 hintText: "Experience",
-                                 fillColor: Color(0xFF3C4043),),
+                                fillColor: Color(0xFF3C4043),),
+                            ),
                           ),
                         ),
+                      ],
+                    ),
+
+                  ],
+                ),
+              ),Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: TextField(style: TextStyle(color: Colors.white),
+                  onChanged: (value){
+                    description=value;
+                  },
+                  decoration: new InputDecoration(
+                    border: new OutlineInputBorder(
+                      borderRadius: const BorderRadius.all(
+                        const Radius.circular(50.0),
                       ),
-                    ],
-                  ),
-
-                ],
+                    ),
+                    filled: true,
+                    hintStyle:
+                    new TextStyle(color: Color(0XFFDCDDE1)),
+                    hintText: "Description",
+                    fillColor: Color(0xFF3C4043),),
+                ),
               ),
-            ),
-            Container(
-              child: RaisedButton(
-                  color: Color(0XFF3C4043),
-                  padding: EdgeInsets.fromLTRB(80, 20, 80, 20),
-                  shape:  new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                  onPressed:() async{
-                  try{
-                  ;
-                    _firestore.collection('doctor').add({
-                      'first_name': first_name,
-                      'email': email,
-                      'last_name': last_name,
-                      'age': age,
-                      'gender': gender,
-                      'zip_code': zip_code,
-                      'telephone': telephone,
-                      'degree': degree,
-                      'experience': experience,
-                    });
+              Container(
+                child: RaisedButton(
+                    color: Color(0XFF3C4043),
+                    padding: EdgeInsets.fromLTRB(80, 20, 80, 20),
+                    shape:  new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                    onPressed:() async{
+                      try{
+                        ;
+                        _firestore.collection('doctor').add({
+                          'first_name': first_name,
+                          'email': email,
+                          'last_name': last_name,
+                          'age': age,
+                          'gender': gender,
+                          'zip_code': zip_code,
+                          'telephone': telephone,
+                          'degree': degree,
+                          'experience': experience,
+                          'description' : description,
+                        });
 
 
-                  final newUser = await _auth.createUserWithEmailAndPassword(email: email , password: password);
-                  if(newUser !=null)
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => doctor_inventory()),
-                    );}
-                catch(e){print(e);}
-                },
-                  child: Text("Submit",style:TextStyle(color: Colors.white))),
-            ),
-          ],
+                        final newUser = await _auth.createUserWithEmailAndPassword(email: email , password: password);
+                        if(newUser !=null)
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => doctor_inventory()),
+                          );}
+                      catch(e){print(e);}
+                    },
+                    child: Text("Submit",style:TextStyle(color: Colors.white))),
+              ),
+            ],
+          ),
         ),
       ),
     );

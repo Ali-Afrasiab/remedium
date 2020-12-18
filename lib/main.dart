@@ -2,6 +2,7 @@
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'consultation.dart';
 import 'doctor_sign_in.dart';
 
 void main() async {
@@ -152,7 +153,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         color: Color(0xFF3C4043),
                         padding: EdgeInsets.fromLTRB(80, 20, 80, 20),
                         shape:  new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                        onPressed:(){},
+                        onPressed:(){Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => consultation()),
+                        );},
                         child: Text("Patient",style:TextStyle(color: Colors.white))),
 
 
