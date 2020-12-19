@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,27 +9,52 @@ import 'package:image_picker/image_picker.dart';
 import 'package:remedium/consultation.dart';
 import 'package:remedium/covid.dart';
 import 'package:remedium/doctor_inventory.dart';
+import 'package:remedium/patient_inventory.dart';
 import 'package:remedium/report_generate.dart';
-import 'package:remedium/test.dart';
+
 
 import 'doctor_sign_in.dart';
 
 final _firestore = Firestore.instance;
 
+FirebaseUser loggedInUser;
 
 class doctor_profile extends StatefulWidget {
-  final pass_email;
-  doctor_profile({this.pass_email});
+  final doc_id;
+  doctor_profile({this.doc_id});
 
   @override
-  _doctor_profileState createState() => _doctor_profileState(recieved_email: pass_email);
+  _doctor_profileState createState() => _doctor_profileState(doc_id: doc_id);
 }
 
-class _doctor_profileState extends State<doctor_profile> {
-  final _auth = FirebaseAuth.instance;
-  _doctor_profileState({this.recieved_email});
-  final String recieved_email;
 
+
+
+class _doctor_profileState extends State<doctor_profile> {
+
+  _doctor_profileState({this.doc_id});
+  final String doc_id;
+  final _auth = FirebaseAuth.instance;
+
+  String messageText;
+
+  @override
+  void initState() {
+    super.initState();
+
+    getCurrentUser();
+  }
+
+  void getCurrentUser() async {
+    try {
+      final user = await _auth.currentUser();
+      if (user != null) {
+        loggedInUser = user;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
 
   @override
@@ -79,7 +105,7 @@ class _doctor_profileState extends State<doctor_profile> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
 
-            MessagesStream(recieved: recieved_email),
+            MessagesStream(doc_id: doc_id),
 
           ],
         ),
@@ -90,10 +116,10 @@ class _doctor_profileState extends State<doctor_profile> {
 }
 
 class MessagesStream extends StatelessWidget {
-  MessagesStream({this.recieved});
+  MessagesStream({this.doc_id});
 
 
-  final String recieved;
+  final String doc_id;
 
   String email;
   String first_name;
@@ -108,6 +134,7 @@ class MessagesStream extends StatelessWidget {
   String description;
   String experience;
   String degree;
+  String image;
 
 
   @override
@@ -126,10 +153,10 @@ class MessagesStream extends StatelessWidget {
         }
         final messages = snapshot.data.documents;
         // List<MessageBubble> messageBubbles = [];
-        print(recieved);
+
         for (var message in messages) {
 
-          if(message.data['email']== recieved)
+          if(message.documentID == doc_id)
           {  email = message.data['email'];
           first_name =message.data['first_name'];
           last_name =message.data['last_name'];
@@ -139,6 +166,7 @@ class MessagesStream extends StatelessWidget {
           telephone = message.data['telephone'];
           age = message.data['age'];
           degree = message.data['degree'];
+          image = message.data['image'];
 
 
 
@@ -171,16 +199,15 @@ class MessagesStream extends StatelessWidget {
 
                             children: [
                               Padding(
-                                padding: const EdgeInsets.all(40.0),
-                                child: GestureDetector(
-                                  child: CircleAvatar(
-                                    radius: 55,
-                                    backgroundColor: Color(0xffFDCF09),
-                                    child: Icon(
-                                      Icons.camera_alt,
-                                      color: Colors.grey[800],
-                                    ),
-                                  ),
+                                padding: const EdgeInsets.all(20.0),
+                                child: CircularProfileAvatar(
+                                  image,
+
+                                  borderColor: Colors.blueGrey,
+                                  borderWidth: 2,
+                                  elevation: 5,
+                                  radius: 80,
+                                  cacheImage: true,
                                 ),
                               ),
 
@@ -255,6 +282,20 @@ class MessagesStream extends StatelessWidget {
                                           Text("${telephone}",style:TextStyle(color: CupertinoColors.white,fontWeight: FontWeight.bold,fontSize: 18),),
                                         ],
                                       ),
+                                      Row
+                                        (
+                                        children: [
+                                          Text("Experience : ",style:TextStyle(color: Colors.white70),),
+                                          Text("${experience}",style:TextStyle(color: CupertinoColors.white,fontWeight: FontWeight.bold,fontSize: 18),),
+                                        ],
+                                      ),
+                                      Row
+                                        (
+                                        children: [
+                                          Text("Degree : ",style:TextStyle(color: Colors.white70),),
+                                          Text("${degree}",style:TextStyle(color: CupertinoColors.white,fontWeight: FontWeight.bold,fontSize: 18),),
+                                        ],
+                                      ),
 
                                     ],
                                   ),
@@ -280,7 +321,7 @@ class MessagesStream extends StatelessWidget {
 
                             //shadowColor: Colors.blue,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25.0),
+                              borderRadius: BorderRadius.circular(15.0),
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(10.0),
@@ -297,7 +338,7 @@ class MessagesStream extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text("STATUS: ",style:TextStyle(fontSize: 20,color: CupertinoColors.white) ),
-                                Text("awaiting",style:TextStyle(fontSize: 20,color: colour) ),
+                                Text("Available",style:TextStyle(fontSize: 20,color: CupertinoColors.white) ),
                               ],
                             )
                           ],
@@ -313,8 +354,9 @@ class MessagesStream extends StatelessWidget {
                     focusElevation: 100,
                     splashColor: CupertinoColors.white,
                     onPressed: ()async{
-                      try{
 
+                      try{
+                        final currentUser = loggedInUser.uid;
                         _firestore.collection('consultation').add({
                           'first_name': first_name,
                           'email': email,
@@ -326,13 +368,18 @@ class MessagesStream extends StatelessWidget {
                           'request': "awaiting",
                           'experience': experience,
                           'description' : description,
+                          'image':image,
+                          'doctor_doc_id': doc_id,
+                          'patient_id': currentUser,
+
+
                         });
 
 
 
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => doctor_inventory()),
+                            MaterialPageRoute(builder: (context) => patient_inventory()),
                           );}
                       catch(e){print(e);}
                     },

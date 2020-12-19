@@ -9,18 +9,17 @@ import 'package:remedium/nav_drawer.dart';
 import 'package:remedium/patient_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'doctor_profile.dart';
+import 'consultation.dart';
 
 final _firestore = Firestore.instance;
 FirebaseUser loggedInUser;
 
-
-class consultation extends StatefulWidget {
+class patient_inventory extends StatefulWidget {
   @override
-  _consultationState createState() => _consultationState();
+  _doctor_inventoryState createState() => _doctor_inventoryState();
 }
 
-class _consultationState extends State<consultation> {
+class _doctor_inventoryState extends State<patient_inventory> {
   final messageTextController = TextEditingController();
   final _auth = FirebaseAuth.instance;
 
@@ -50,15 +49,19 @@ class _consultationState extends State<consultation> {
       drawer: nav_drawer(),
       appBar: new PreferredSize(
         child: new Container(
-
           padding: new EdgeInsets.only(top: MediaQuery.of(context).padding.top),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
-              children: [IconButton(
-
-                  icon: Icon(Icons.more_vert,color: CupertinoColors.white,),
-                  onPressed: (){nav_drawer();}),
+              children: [
+                IconButton(
+                    icon: Icon(
+                      Icons.more_vert,
+                      color: CupertinoColors.white,
+                    ),
+                    onPressed: () {
+                      nav_drawer();
+                    }),
                 SizedBox(
                   width: 5,
                 ),
@@ -70,8 +73,10 @@ class _consultationState extends State<consultation> {
                   padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                   child: Row(
                     children: [
-                      Text("Search for Doctor with name",
-                          style: TextStyle(color:Color(0XFFDCDDE1),)),
+                      Text("Search for docters with name",
+                          style: TextStyle(
+                            color: Color(0XFFDCDDE1),
+                          )),
                       SizedBox(
                         width: 20,
                       ),
@@ -90,7 +95,6 @@ class _consultationState extends State<consultation> {
                   shape: new RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(70.0)),
                   onPressed: () {},
-
                   padding: EdgeInsets.fromLTRB(1, 10, 1, 10),
                   child: Row(
                     children: [
@@ -104,15 +108,13 @@ class _consultationState extends State<consultation> {
               ],
             ),
           ),
-          decoration: new BoxDecoration(
-              color: Color(0xFF202125),
-              boxShadow: [
-                new BoxShadow(
-                  color: Colors.blue,
-                  blurRadius: 20.0,
-                  spreadRadius: 1.0,
-                ),
-              ]),
+          decoration: new BoxDecoration(color: Color(0xFF202125), boxShadow: [
+            new BoxShadow(
+              color: Colors.blue,
+              blurRadius: 20.0,
+              spreadRadius: 1.0,
+            ),
+          ]),
         ),
         preferredSize: new Size(MediaQuery.of(context).size.width, 80.0),
       ),
@@ -122,7 +124,6 @@ class _consultationState extends State<consultation> {
             color: Color(0xFF202125),
           ),
           child: Column(
-
             //    color: Color(0xFF202125),
 
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -133,21 +134,20 @@ class _consultationState extends State<consultation> {
           ),
         ),
       ),
-    /*  floatingActionButton: FloatingActionButton.extended(
-        backgroundColor:Color(0XFF3C4043),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Color(0XFF3C4043),
         focusColor: Colors.blue,
         focusElevation: 100,
         splashColor: CupertinoColors.white,
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => create_patient()),
+            MaterialPageRoute(builder: (context) => consultation()),
           );
         },
-        label: Text('Add Patient'),
+        label: Text(' consultation'),
         icon: Icon(Icons.add),
-
-      ),*/
+      ),
     );
   }
 }
@@ -156,7 +156,7 @@ class MessagesStream extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: _firestore.collection('doctor').snapshots(),
+      stream: _firestore.collection('consultation').snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(
@@ -168,8 +168,6 @@ class MessagesStream extends StatelessWidget {
         final messages = snapshot.data.documents;
         List<MessageBubble> messageBubbles = [];
 
-
-
         for (var message in messages) {
           final first_name = message.data['first_name'];
           final last_name = message.data['last_name'];
@@ -177,23 +175,26 @@ class MessagesStream extends StatelessWidget {
           final degree = message.data['degree'];
           final email = message.data['email'];
           final image = message.data['image'];
-          final doc_id =message.documentID;
-          //print(image);
+          String color;
 
 
+          final uid = message.data['patient_id'];
 
+          final currentUser = loggedInUser.uid;
+
+          if (currentUser == uid) {
             final messageBubble = MessageBubble(
-              first_name: first_name,
-              last_name: last_name,
-              experience: experience,
-              degree: degree,
-              email: email,
-              image: image,
-              doc_id :doc_id
+                first_name: first_name,
+                last_name: last_name,
+                experience: experience,
+                degree: degree,
+                email: email,
+                image: image,
+
             );
 
             messageBubbles.add(messageBubble);
-
+          }
         }
         return Expanded(
           child: ListView(
@@ -223,12 +224,12 @@ class MessageBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     return FlatButton(
       onPressed: () {
-        Navigator.push(
+        /*Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => doctor_profile(doc_id: doc_id,
               )),
-        );
+        );*/
 
       },
       child: Card(
@@ -258,7 +259,7 @@ class MessageBubble extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: CircularProfileAvatar(
-                   image,
+                    image,
 
                     borderColor: Colors.purpleAccent,
                     borderWidth: 5,
@@ -276,14 +277,3 @@ class MessageBubble extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-

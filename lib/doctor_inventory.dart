@@ -41,11 +41,13 @@ class _doctor_inventoryState extends State<doctor_inventory> {
       print(e);
     }
   }
-
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       drawer: nav_drawer(),
+
       appBar: new PreferredSize(
         child: new Container(
 
@@ -56,7 +58,7 @@ class _doctor_inventoryState extends State<doctor_inventory> {
               children: [IconButton(
 
                   icon: Icon(Icons.more_vert,color: CupertinoColors.white,),
-                  onPressed: (){nav_drawer();}),
+                onPressed: () => _scaffoldKey.currentState.openDrawer(),),
                 SizedBox(
                   width: 5,
                 ),
@@ -164,6 +166,7 @@ class MessagesStream extends StatelessWidget {
           );
         }
         final messages = snapshot.data.documents;
+
         List<MessageBubble> messageBubbles = [];
 
 
@@ -173,7 +176,10 @@ class MessagesStream extends StatelessWidget {
           final gender = message.data['gender'];
           final date = message.data['date'];
           final email = message.data['email'];
+         // message.data['result']="negative";
           String result = message.data['result'];
+          String image = message.data['image'];
+        //  print("result is : ${result}");
           String color;
           if (result == null) {
             result = "pending";
@@ -181,16 +187,19 @@ class MessagesStream extends StatelessWidget {
           };
 
           final uid = message.data['doctor_uid'];
+          final String id =message.documentID;
 
           final currentUser = loggedInUser.uid;
 
           if(currentUser == uid ){
             final messageBubble = MessageBubble(
+              image: image,
               name: name,
               gender: gender,
               date: date,
               result: result,
               email: email,
+              doc_id: id,
             );
 
             messageBubbles.add(messageBubble);
@@ -208,12 +217,14 @@ class MessagesStream extends StatelessWidget {
 }
 
 class MessageBubble extends StatelessWidget {
-  MessageBubble({this.email, this.name, this.gender, this.date, this.result});
+  MessageBubble({this.doc_id,this.email,this.image, this.name, this.gender, this.date, this.result});
   final String email;
   final String name;
   final String gender;
   final String date;
   final String result;
+  final String image;
+  final String doc_id;
 
   @override
   Widget build(BuildContext context) {
@@ -223,7 +234,7 @@ class MessageBubble extends StatelessWidget {
           context,
           MaterialPageRoute(
               builder: (context) => patient_profile(
-                    pass_email: email,
+                   doc_id: doc_id ,
                   )),
         );
       },
@@ -257,8 +268,9 @@ class MessageBubble extends StatelessWidget {
             Column(
               children: [
                 CircularProfileAvatar(
-                  '',
+                  image,
                   child: FlutterLogo(),
+                  cacheImage: true,
                   borderColor: Colors.purpleAccent,
                   borderWidth: 5,
                   elevation: 2,

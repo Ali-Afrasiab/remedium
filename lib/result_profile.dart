@@ -16,17 +16,17 @@ import 'doctor_sign_in.dart';
 final _firestore = Firestore.instance;
 
 
-class patient_profile extends StatefulWidget {
+class result_profile extends StatefulWidget {
   final doc_id;
-  patient_profile({this.doc_id});
+  result_profile({this.doc_id});
 
   @override
-  _patient_profileState createState() => _patient_profileState(doc_id: doc_id);
+  _result_profileState createState() => _result_profileState(doc_id: doc_id);
 }
 
-class _patient_profileState extends State<patient_profile> {
+class _result_profileState extends State<result_profile> {
   final _auth = FirebaseAuth.instance;
-  _patient_profileState({this.doc_id});
+  _result_profileState({this.doc_id});
   final String doc_id;
 
 

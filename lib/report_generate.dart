@@ -1,26 +1,24 @@
 
 import 'dart:io';
-
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:remedium/covid.dart';
 import 'package:remedium/patient_profile.dart';
-import 'package:remedium/test.dart';
 
 final _firestore = Firestore.instance;
 class report_generate extends StatefulWidget {
-  final pass_email;
-  final pass_result;
-  report_generate({this.pass_result,this.pass_email});
+  final doc_id;
+  report_generate({this.doc_id});
   @override
-  _report_generateState createState() => _report_generateState();
+  _report_generateState createState() => _report_generateState(doc_id: doc_id);
 }
 
 class _report_generateState extends State<report_generate> {
-  _report_generateState({this.recieved_email,this.pass_result,});
-  final String recieved_email;
-  final String pass_result;
+  _report_generateState({this.doc_id});
+  final String doc_id;
+
   @override
   Widget build(BuildContext context) {
 
@@ -44,7 +42,7 @@ class _report_generateState extends State<report_generate> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => patient_profile()),
+                              builder: (context) => patient_profile(doc_id: doc_id,)),
                         );
                       }),
 
@@ -78,7 +76,7 @@ class _report_generateState extends State<report_generate> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
 
-            MessagesStream(recieved: recieved_email,recieved_result: pass_result),
+            MessagesStream(doc_id: doc_id),
 
           ],
         ),
@@ -90,11 +88,11 @@ class _report_generateState extends State<report_generate> {
 
 
 class MessagesStream extends StatelessWidget {
-  MessagesStream({this.recieved,this.recieved_result});
+  MessagesStream({this.doc_id});
 
 
-  final String recieved;
-  final String recieved_result;
+  final String doc_id;
+
   String email;
   String first_name;
   String last_name;
@@ -127,7 +125,7 @@ class MessagesStream extends StatelessWidget {
         for (var message in messages) {
 
 
-          if(message.data['email']== recieved)
+          if(message.documentID== doc_id)
           {  email = message.data['email'];
           first_name =message.data['first_name'];
           last_name =message.data['last_name'];
@@ -138,11 +136,6 @@ class MessagesStream extends StatelessWidget {
           age = message.data['age'];
           date = message.data['date'];
           result = message.data['result'];
-          print("recieved_result : ${recieved_result}");
-
-          if(recieved_result!=null) {
-            result= recieved_result;
-          }
 
           if(result==null) {
             result="pending";
@@ -259,7 +252,7 @@ class MessagesStream extends StatelessWidget {
                                 Expanded(
                                   child: Padding(
                                     padding: const EdgeInsets.all(12.0),
-                                    child: Text("Result: ${recieved_result}",style:TextStyle(color:colour),)
+                                    child: Text("Result: ${result}",style:TextStyle(color:colour),)
                                   ),
                                 ),
                               ]),
@@ -301,7 +294,7 @@ class MessagesStream extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => covid()),
+                                        builder: (context) => covid(doc_id: doc_id)),
                                   );
                                 }),
                           ),

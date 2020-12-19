@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -8,12 +9,20 @@ import 'package:tflite/tflite.dart';
 
 
 
+final _firestore = Firestore.instance;
+
+
 class covid extends StatefulWidget {
+  final doc_id;
+
+  covid({this.doc_id});
   @override
-  _covidState createState() => _covidState();
+  _covidState createState() => _covidState(doc_id:doc_id);
 }
 
 class _covidState extends State<covid> {
+  _covidState({this.doc_id,});
+  final String doc_id;
   List _outputs;
   File _image;
   bool _loading = false;
@@ -47,8 +56,7 @@ class _covidState extends State<covid> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => report_generate(
-                            pass_result: _outputs[0]["label"]
+                        builder: (context) => report_generate(doc_id: doc_id,
                         ),),
                     );
 
@@ -110,11 +118,24 @@ class _covidState extends State<covid> {
                       color: Colors.blueGrey,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25.0)),
-                      onPressed: (){Navigator.push(
+                      onPressed: (){
+                        String result;
+                        if(_outputs[0]["label"]=="1 positive") {
+                                  result = "Positve";
+                                }
+                        if(_outputs[0]["label"]=="0 negative")
+                           result="Negative";
+                        print("doc_id :${doc_id}");
+                        Firestore.instance
+                            .collection('patient')
+                            .document(doc_id)
+                            .updateData({
+                          "result":result
+                        });
+                        Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => report_generate(
-                              pass_result: _outputs[0]["label"]
+                            builder: (context) => report_generate(doc_id: doc_id,
                             ),),
                       );},
                       child: Text("Return to report creation",style:TextStyle(color:CupertinoColors.white)),
@@ -175,3 +196,4 @@ class _covidState extends State<covid> {
     super.dispose();
   }
 }
+

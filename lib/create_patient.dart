@@ -12,7 +12,7 @@ import 'doctor_sign_in.dart';
 import 'package:intl/intl.dart';
 
 final _firestore = Firestore.instance;
-
+FirebaseStorage _storage = FirebaseStorage.instance;
 final DateTime now = DateTime.now();
 final DateFormat formatter = DateFormat('yyyy-MM-dd');
 final String formatted = formatter.format(now);
@@ -92,7 +92,7 @@ class _create_patientState extends State<create_patient> {
           padding: new EdgeInsets.only(top: MediaQuery.of(context).padding.top),
           child: new Padding(
               padding:
-                  const EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0),
+              const EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0),
               child: Row(
                 children: [IconButton(
 
@@ -113,7 +113,7 @@ class _create_patientState extends State<create_patient> {
                       Text(
                           " Fill out the form below so we can get you started.",
                           style:
-                              TextStyle(fontSize: 13, color: Colors.white70)),
+                          TextStyle(fontSize: 13, color: Colors.white70)),
                     ],
                   ),
                 ],
@@ -155,16 +155,16 @@ class _create_patientState extends State<create_patient> {
                   ),
                 )
                     : Container(
-                        decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(50)),
-                        width: 100,
-                        height: 100,
-                        child: Icon(
-                          Icons.camera_alt,
-                          color: Colors.grey[800],
-                        ),
-                      ),
+                  decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(50)),
+                  width: 100,
+                  height: 100,
+                  child: Icon(
+                    Icons.camera_alt,
+                    color: Colors.grey[800],
+                  ),
+                ),
               ),
             ),
             Container(
@@ -194,7 +194,7 @@ class _create_patientState extends State<create_patient> {
                               ),
                               filled: true,
                               hintStyle:
-                                  new TextStyle(color: Color(0XFFDCDDE1)),
+                              new TextStyle(color: Color(0XFFDCDDE1)),
                               hintText: "First Name",
                               fillColor: Color(0xFF3C4043),
                             ),
@@ -209,14 +209,14 @@ class _create_patientState extends State<create_patient> {
                               last_name = value;
                             },
                             decoration: new InputDecoration(
-                                border: new OutlineInputBorder(
-                                  borderRadius: const BorderRadius.all(
-                                    const Radius.circular(50.0),
-                                  ),
+                              border: new OutlineInputBorder(
+                                borderRadius: const BorderRadius.all(
+                                  const Radius.circular(50.0),
                                 ),
-                                filled: true,
-                                hintStyle:
-                                new TextStyle(color: Color(0XFFDCDDE1)),
+                              ),
+                              filled: true,
+                              hintStyle:
+                              new TextStyle(color: Color(0XFFDCDDE1)),
                               hintText: "Last Name",
                               fillColor: Color(0xFF3C4043),),
                           ),
@@ -234,14 +234,14 @@ class _create_patientState extends State<create_patient> {
                               age = value;
                             },
                             decoration: new InputDecoration(
-                                border: new OutlineInputBorder(
-                                  borderRadius: const BorderRadius.all(
-                                    const Radius.circular(50.0),
-                                  ),
+                              border: new OutlineInputBorder(
+                                borderRadius: const BorderRadius.all(
+                                  const Radius.circular(50.0),
                                 ),
-                                filled: true,
-                                hintStyle:
-                                new TextStyle(color: Color(0XFFDCDDE1)),
+                              ),
+                              filled: true,
+                              hintStyle:
+                              new TextStyle(color: Color(0XFFDCDDE1)),
                               hintText: "Age",
                               fillColor: Color(0xFF3C4043),),
                           ),
@@ -293,14 +293,14 @@ class _create_patientState extends State<create_patient> {
                               email = value;
                             },
                             decoration: new InputDecoration(
-                                border: new OutlineInputBorder(
-                                  borderRadius: const BorderRadius.all(
-                                    const Radius.circular(50.0),
-                                  ),
+                              border: new OutlineInputBorder(
+                                borderRadius: const BorderRadius.all(
+                                  const Radius.circular(50.0),
                                 ),
-                                filled: true,
-                                hintStyle:
-                                new TextStyle(color: Color(0XFFDCDDE1)),
+                              ),
+                              filled: true,
+                              hintStyle:
+                              new TextStyle(color: Color(0XFFDCDDE1)),
                               hintText: "Email",
                               fillColor: Color(0xFF3C4043),),
                           ),
@@ -318,14 +318,14 @@ class _create_patientState extends State<create_patient> {
                               zip_code = value;
                             },
                             decoration: new InputDecoration(
-                                border: new OutlineInputBorder(
-                                  borderRadius: const BorderRadius.all(
-                                    const Radius.circular(50.0),
-                                  ),
+                              border: new OutlineInputBorder(
+                                borderRadius: const BorderRadius.all(
+                                  const Radius.circular(50.0),
                                 ),
-                                filled: true,
-                                hintStyle:
-                                new TextStyle(color: Color(0XFFDCDDE1)),
+                              ),
+                              filled: true,
+                              hintStyle:
+                              new TextStyle(color: Color(0XFFDCDDE1)),
                               hintText: "Zip Code",
                               fillColor: Color(0xFF3C4043),),
                           ),
@@ -339,14 +339,14 @@ class _create_patientState extends State<create_patient> {
                               telephone = value;
                             },
                             decoration: new InputDecoration(
-                                border: new OutlineInputBorder(
-                                  borderRadius: const BorderRadius.all(
-                                    const Radius.circular(50.0),
-                                  ),
+                              border: new OutlineInputBorder(
+                                borderRadius: const BorderRadius.all(
+                                  const Radius.circular(50.0),
                                 ),
-                                filled: true,
-                                hintStyle:
-                                new TextStyle(color: Color(0XFFDCDDE1)),
+                              ),
+                              filled: true,
+                              hintStyle:
+                              new TextStyle(color: Color(0XFFDCDDE1)),
                               hintText: "Mobile number",
                               fillColor: Color(0xFF3C4043),),
                           ),
@@ -364,15 +364,15 @@ class _create_patientState extends State<create_patient> {
                           },
                           obscureText: true,
                           decoration: new InputDecoration(
-                              border: new OutlineInputBorder(
-                                borderRadius: const BorderRadius.all(
-                                  const Radius.circular(50.0),
-                                ),
+                            border: new OutlineInputBorder(
+                              borderRadius: const BorderRadius.all(
+                                const Radius.circular(50.0),
                               ),
-                              filled: true,
-                              hintStyle: new TextStyle(color: CupertinoColors.white),
-        hintText: "Pre-Diagnosis Condition:",
-        fillColor: Color(0xFF3C4043),),
+                            ),
+                            filled: true,
+                            hintStyle: new TextStyle(color: CupertinoColors.white),
+                            hintText: "Pre-Diagnosis Condition:",
+                            fillColor: Color(0xFF3C4043),),
 
                         ),
                       ),
@@ -389,6 +389,11 @@ class _create_patientState extends State<create_patient> {
                       borderRadius: new BorderRadius.circular(30.0)),
                   onPressed: () async {
                     try {
+                      StorageReference reference = _storage.ref().child("doctor_profile/${email}");
+
+                      //Upload the file to firebase
+                      StorageUploadTask uploadTask = reference.putFile(_image);
+                      String url = await (await uploadTask.onComplete).ref.getDownloadURL();
                       final FirebaseUser user = await _auth.currentUser();
                       final uid = user.uid;
                       _firestore.collection('patient').add({
@@ -402,6 +407,7 @@ class _create_patientState extends State<create_patient> {
                         'telephone': telephone,
                         'condition': condition,
                         'date': formatted,
+                        'image' : url,
                       });
                       StorageReference storageReference =
                       FirebaseStorage.instance.ref().child("doctor_profile/$_image");

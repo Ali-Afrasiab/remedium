@@ -65,7 +65,7 @@ class nav_drawer extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => doctor_sign_in(),
+                    builder: (context) => MyApp(),
                   ),
                 );
               },

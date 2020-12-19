@@ -2,6 +2,8 @@
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:remedium/patient_sign_in.dart';
+
 import 'consultation.dart';
 import 'doctor_sign_in.dart';
 
@@ -155,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         shape:  new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                         onPressed:(){Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => consultation()),
+                          MaterialPageRoute(builder: (context) => patient_sign_in()),
                         );},
                         child: Text("Patient",style:TextStyle(color: Colors.white))),
 
