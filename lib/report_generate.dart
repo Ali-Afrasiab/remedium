@@ -155,176 +155,224 @@ class MessagesStream extends StatelessWidget {
           }
         }
 
-        return Expanded(
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Color(0xFF202125),
-              ),
-              child: Column(
-                children: [
-                  Card( color: Color(0XFF3E3F43),
-                    elevation: 10,
+        return StreamBuilder<QuerySnapshot>(
+          stream: _firestore.collection('consultation').snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.lightBlueAccent,
+                ),
+              );
+            }
+            final messages = snapshot.data.documents;
+            // List<MessageBubble> messageBubbles = [];
+            //print(recieved);
+            for (var message in messages) {
 
 
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0),
-                    ),
-                    child: Column(
-                      children: [
-                        SizedBox(height: 15),
+              if(message.documentID== doc_id)
+              {  email = message.data['_patient_email'];
+              first_name =message.data['_patient_first_name'];
+              last_name =message.data['_patient_last_name'];
+              gender = message.data['_patient_gender'];
+              condition = message.data['_patient_condition'];
+              //final date = message.data['date'];
+              telephone = message.data['_patient_telephone'];
+              age = message.data['_patient_age'];
+              date = message.data['_patient_date'];
+              result = message.data['_patient_result'];
 
-                        Container(
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: Text(
-                                    "Personal Information                                        ",
-                                    style: TextStyle(
-                                        fontSize: 20, color: CupertinoColors.white)),
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Text("First Name: ${first_name}",style:TextStyle(color:CupertinoColors.white),)
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Text("Last Name: ${last_name}",style:TextStyle(color:CupertinoColors.white),)
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Text("Gender: ${gender}",style:TextStyle(color:CupertinoColors.white),)
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Text("Age: ${age}",style:TextStyle(color:CupertinoColors.white),)
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                    "Contact Info                                        ",
-                                    style: TextStyle(fontSize: 24,color:CupertinoColors.white,)),
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Text("Email: ${email}",style:TextStyle(color:CupertinoColors.white),)
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Text("Phone #: ${telephone}",style:TextStyle(color:CupertinoColors.white),)
-                                    ),
-                                  ),
-
-                                ],
-                              ),
-                              Row(children: [
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Text("Result: ${result}",style:TextStyle(color:colour),)
-                                  ),
-                                ),
-                              ]),
-                            ],
-                          ),
-                        ),
-
-                      ],
-                    ),
-                  ),
-
-                  Card(elevation: 10,
-                    color: Color(0XFF3E3F43),
+              if(result==null) {
+                result="pending";
+                colour =Colors.yellowAccent;
+              }
+              if(result=="0 negative") {
+                colour= Colors.green ;
+              }
+              if(result=="1 positive")colour= Colors.red;
 
 
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0),
-                    ),
 
-                    child: Padding(
-                      padding: const EdgeInsets.all(25.0),
-                      child: Row(
+
+
+
+
+              }
+            }
+
+            return Expanded(
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Color(0xFF202125),
+                ),
+                child: Column(
+                  children: [
+                    Card( color: Color(0XFF3E3F43),
+                      elevation: 10,
+
+
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      child: Column(
                         children: [
-                          SizedBox(width: 30,),
-                          Text("Select X-Ray image for Diagnosis",style:TextStyle(color:CupertinoColors.white)),
-                          SizedBox(width: 30,),
-                          Card(
-                            color: Colors.blueGrey,
+                          SizedBox(height: 15),
 
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.0),
+                          Container(
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Text(
+                                      "Personal Information                                        ",
+                                      style: TextStyle(
+                                          fontSize: 20, color: CupertinoColors.white)),
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Padding(
+                                          padding: const EdgeInsets.all(12.0),
+                                          child: Text("First Name: ${first_name}",style:TextStyle(color:CupertinoColors.white),)
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Padding(
+                                          padding: const EdgeInsets.all(12.0),
+                                          child: Text("Last Name: ${last_name}",style:TextStyle(color:CupertinoColors.white),)
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Padding(
+                                          padding: const EdgeInsets.all(12.0),
+                                          child: Text("Gender: ${gender}",style:TextStyle(color:CupertinoColors.white),)
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Padding(
+                                          padding: const EdgeInsets.all(12.0),
+                                          child: Text("Age: ${age}",style:TextStyle(color:CupertinoColors.white),)
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
-
-                            child: IconButton(
-
-                                icon: Icon(Icons.add_a_photo_sharp,color: CupertinoColors.white,),
-                                onPressed: () {
-
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => covid(doc_id: doc_id)),
-                                  );
-                                }),
                           ),
+                          Container(
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                      "Contact Info                                        ",
+                                      style: TextStyle(fontSize: 24,color:CupertinoColors.white,)),
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Padding(
+                                          padding: const EdgeInsets.all(12.0),
+                                          child: Text("Email: ${email}",style:TextStyle(color:CupertinoColors.white),)
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Padding(
+                                          padding: const EdgeInsets.all(12.0),
+                                          child: Text("Phone #: ${telephone}",style:TextStyle(color:CupertinoColors.white),)
+                                      ),
+                                    ),
+
+                                  ],
+                                ),
+                                Row(children: [
+                                  Expanded(
+                                    child: Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: Text("Result: ${result}",style:TextStyle(color:CupertinoColors.white),)
+                                    ),
+                                  ),
+                                ]),
+                              ],
+                            ),
+                          ),
+
                         ],
                       ),
                     ),
 
-                  ),
-
-                  Container(
-                    child: RaisedButton(
-                        color: Color(0XFF3C4043),
-                        padding: EdgeInsets.fromLTRB(80, 20, 80, 20),
-                        shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(30.0)),
-                        onPressed: () {
+                    Card(elevation: 10,
+                      color: Color(0XFF3E3F43),
 
 
-                          /*   Navigator.push(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+
+                      child: Padding(
+                        padding: const EdgeInsets.all(25.0),
+                        child: Row(
+                          children: [
+                            SizedBox(width: 30,),
+                            Text("Select X-Ray image for Diagnosis",style:TextStyle(color:CupertinoColors.white)),
+                            SizedBox(width: 30,),
+                            Card(
+                              color: Colors.blueGrey,
+
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+
+                              child: IconButton(
+
+                                  icon: Icon(Icons.add_a_photo_sharp,color: CupertinoColors.white,),
+                                  onPressed: () {
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => covid(doc_id: doc_id)),
+                                    );
+                                  }),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                    ),
+
+                    Container(
+                      child: RaisedButton(
+                          color: Color(0XFF3C4043),
+                          padding: EdgeInsets.fromLTRB(80, 20, 80, 20),
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(30.0)),
+                          onPressed: () {
+
+
+                            /*   Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context)),
                         );*/
 
-                        },
-                        child: Text("Send Report", style: TextStyle(color: CupertinoColors.white))),
-                  ), ],
-              ),
+                          },
+                          child: Text("Send Report", style: TextStyle(color: CupertinoColors.white))),
+                    ), ],
+                ),
 
-            ),
+              ),
+            );
+          },
         );
       },
     );

@@ -10,9 +10,10 @@ import 'package:remedium/doctor_inventory.dart';
 import 'package:remedium/patient_inventory.dart';
 import 'consultation.dart';
 import 'doctor_sign_in.dart';
+import 'dart:math';
 
 final _firestore = Firestore.instance;
-
+FirebaseStorage _storage = FirebaseStorage.instance;
 class patient_sign_up extends StatefulWidget {
   @override
   _doctor_sign_upState createState() => _doctor_sign_upState();
@@ -478,8 +479,22 @@ class _doctor_sign_upState extends State<patient_sign_up> {
                     shape: new RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(30.0)),
                     onPressed: () async {
+                      StorageReference reference = _storage.ref().child("patient_profile/${email}");
+
+                      //Upload the file to firebase
+                      StorageUploadTask uploadTask = reference.putFile(_image);
+                      String docUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
+
+
+
+                      Random random = new Random();
+                      int random_number = random.nextInt(100);
+
+
                       try {
-                        ;
+                        final newUser =
+                        await _auth.createUserWithEmailAndPassword(
+                            email: email, password: password);
                         _firestore.collection('Patient').add({
                           'first_name': first_name,
                           'email': email,
@@ -491,11 +506,12 @@ class _doctor_sign_upState extends State<patient_sign_up> {
                           'Previous illness': previous_illness,
                           'Symptoms': symptoms,
                           'password': password,
+                          'unique_id': random_number,
+                          'image': docUrl,
+                          'patient_id': newUser.uid,
                         });
 
-                        final newUser =
-                            await _auth.createUserWithEmailAndPassword(
-                                email: email, password: password);
+
                         if (newUser != null)
                           Navigator.push(
                             context,

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -494,8 +495,10 @@ class _doctor_sign_upState extends State<doctor_sign_up> {
                         //Upload the file to firebase
                         StorageUploadTask uploadTask = reference.putFile(_image);
                         String docUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
+                      //  final newUser = await _auth.createUserWithEmailAndPassword(email: email , password: password);
+                        Random random = new Random();
 
-
+                        int random_number = random.nextInt(100);
                         _firestore.collection('doctor').add({
 
                           'first_name': first_name,
@@ -509,6 +512,7 @@ class _doctor_sign_upState extends State<doctor_sign_up> {
                           'experience': experience,
                           'description' : description,
                           'image': docUrl,
+                          'unique_id':random_number,
                         });
 
 

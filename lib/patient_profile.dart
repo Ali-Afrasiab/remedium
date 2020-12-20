@@ -38,14 +38,15 @@ class _patient_profileState extends State<patient_profile> {
       resizeToAvoidBottomInset: false,
       appBar: new PreferredSize(
         child: new Container(
-          //padding: new EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-          padding:  EdgeInsets.all(20),
-          child: Row(
 
-            children: [
-              IconButton(
+          padding: new EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [IconButton(
 
-                  icon: Icon(Icons.arrow_back,color: CupertinoColors.white,),
+
+                  icon: Icon(Icons.arrow_back_rounded,color: CupertinoColors.white,),
                   onPressed: () {
 
                     Navigator.push(
@@ -53,25 +54,30 @@ class _patient_profileState extends State<patient_profile> {
                       MaterialPageRoute(
                           builder: (context) =>doctor_inventory()),
                     );
-                  }),
-              Text("Patient Profile",
-                  style: TextStyle(fontSize: 20, color: Colors.white)),
-            ],
+                  }
+              ),
+                SizedBox(
+                  width: 5,
+                ),
+                Text("Patient Profile",style:TextStyle(fontSize: 25,color:CupertinoColors.white,
+
+                ),),
+
+
+              ],
+            ),
           ),
           decoration: new BoxDecoration(
-
               color: Color(0xFF202125),
-
               boxShadow: [
                 new BoxShadow(
                   color: Colors.blue,
                   blurRadius: 20.0,
                   spreadRadius: 1.0,
                 ),
-              ]
-          ),
+              ]),
         ),
-        preferredSize: new Size(MediaQuery.of(context).size.width, 50.0),
+        preferredSize: new Size(MediaQuery.of(context).size.width, 80.0),
       ),
       body: SafeArea(
         child: Column(
@@ -90,7 +96,7 @@ class _patient_profileState extends State<patient_profile> {
         focusElevation: 100,
         splashColor: CupertinoColors.white,
         onPressed: () {
-          print(doc_id);
+          //print(doc_id);
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => report_generate(doc_id: doc_id,)),
@@ -175,173 +181,223 @@ class MessagesStream extends StatelessWidget {
           }
         }
 
-        return Expanded(
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Color(0xFF202125),
-              ),
-              child: Column(
-                children: [
-                  Center(
-                    child: Column(
-                      children: [
-                        SizedBox(height: 10,),
-                        Card(
+        return StreamBuilder<QuerySnapshot>(
+          stream: _firestore.collection('consultation').snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.lightBlueAccent,
+                ),
+              );
+            }
+            final messages = snapshot.data.documents;
+            // List<MessageBubble> messageBubbles = [];
+
+            for (var message in messages) {
+
+              if(message.documentID== doc_id)
+              {  email = message.data['patient_email'];
+              first_name =message.data['patient_first_name'];
+              last_name =message.data['patient_last_name'];
+              gender = message.data['patient_gender'];
+              condition = message.data['patient_condition'];
+              //final date = message.data['date'];
+              telephone = message.data['patient_telephone'];
+              age = message.data['patient_age'];
+              image = message.data['patient_image'];
+              date = message.data['patient_date'];
+              result = message.data['patient_result'];
 
 
-                          color: Color(0XFF3E3F43),
-                          elevation: 10,
-                          //shadowColor: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          child: Row(
+              if(result==null) {
+                result="pending";
+                colour =Colors.yellowAccent;
+              }
+              if(result=="negative") {
+                colour= Colors.green ;
+              }
+              if(result=="positive")colour= Colors.red;
 
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(40.0),
-                                child: CircularProfileAvatar(
-                                  image,
-                                  child: FlutterLogo(),
-                                  cacheImage: true,
-                                  borderColor: Colors.purpleAccent,
-                                  borderWidth: 5,
-                                  elevation: 2,
-                                  radius: 50,
-                                ),
+
+
+
+              final currentUser = loggedInUser.email;
+
+
+
+              }
+            }
+
+            return Expanded(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF202125),
+                  ),
+                  child: Column(
+                    children: [
+                      Center(
+                        child: Column(
+                          children: [
+                            SizedBox(height: 10,),
+                            Card(
+
+
+                              color: Color(0XFF3E3F43),
+                              elevation: 10,
+                              //shadowColor: Colors.blue,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25.0),
                               ),
+                              child: Row(
 
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(30, 10, 10, 20),
-                                child: Card(
-
-                                  color: Color(0XFF3E3F43),
-                                  // elevation: 50,
-
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text("Name : ",style:TextStyle(color: Colors.white70),),
-                                          Text("${first_name} ${last_name}",style:TextStyle(color: CupertinoColors.white,fontWeight: FontWeight.bold,fontSize: 18),),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text("Gender : ",style:TextStyle(color: Colors.white70),),
-                                          Text("${gender}",style:TextStyle(color: CupertinoColors.white,fontWeight: FontWeight.bold,fontSize: 18),),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text("Age : ",style:TextStyle(color: Colors.white70),),
-                                          Text("${age}",style:TextStyle(color: CupertinoColors.white,fontWeight: FontWeight.bold,fontSize: 18),),
-                                        ],
-                                      ),
-
-                                    ],
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(40.0),
+                                    child: CircularProfileAvatar(
+                                      image,
+                                      child: FlutterLogo(),
+                                      cacheImage: true,
+                                      borderColor: Colors.purpleAccent,
+                                      borderWidth: 5,
+                                      elevation: 2,
+                                      radius: 50,
+                                    ),
                                   ),
 
-                                ),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(30, 10, 10, 20),
+                                    child: Card(
+
+                                      color: Color(0XFF3E3F43),
+                                      // elevation: 50,
+
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text("Name : ",style:TextStyle(color: Colors.white70),),
+                                              Text("${first_name} ${last_name}",style:TextStyle(color: CupertinoColors.white,fontWeight: FontWeight.bold,fontSize: 18),),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text("Gender : ",style:TextStyle(color: Colors.white70),),
+                                              Text("${gender}",style:TextStyle(color: CupertinoColors.white,fontWeight: FontWeight.bold,fontSize: 18),),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text("Age : ",style:TextStyle(color: Colors.white70),),
+                                              Text("${age}",style:TextStyle(color: CupertinoColors.white,fontWeight: FontWeight.bold,fontSize: 18),),
+                                            ],
+                                          ),
+
+                                        ],
+                                      ),
+
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 30,),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                          child: Card(
-
-                            color: Color(0XFF3E3F43),
-                            elevation: 10,
-
-                            //shadowColor: Colors.blue,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25.0),
                             ),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(30.0),
-                                  child: Column(
+                            SizedBox(height: 30,),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                              child: Card(
 
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text("Email : ",style:TextStyle(color: Colors.white70),),
-                                          Text("${email}",style:TextStyle(color: CupertinoColors.white,fontWeight: FontWeight.bold,fontSize: 18),),
-                                        ],
-                                      ),
-                                      Row
-                                        (
-                                        children: [
-                                          Text("Phone : ",style:TextStyle(color: Colors.white70),),
-                                          Text("${telephone}",style:TextStyle(color: CupertinoColors.white,fontWeight: FontWeight.bold,fontSize: 18),),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text("Date : ",style:TextStyle(color: Colors.white70),),
-                                          Text("${date}",style:TextStyle(color: CupertinoColors.white,fontWeight: FontWeight.bold,fontSize: 18),),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                                color: Color(0XFF3E3F43),
+                                elevation: 10,
+
+                                //shadowColor: Colors.blue,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25.0),
                                 ),
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(30.0),
+                                      child: Column(
+
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text("Email : ",style:TextStyle(color: Colors.white70),),
+                                              Text("${email}",style:TextStyle(color: CupertinoColors.white,fontWeight: FontWeight.bold,fontSize: 18),),
+                                            ],
+                                          ),
+                                          Row
+                                            (
+                                            children: [
+                                              Text("Phone : ",style:TextStyle(color: Colors.white70),),
+                                              Text("${telephone}",style:TextStyle(color: CupertinoColors.white,fontWeight: FontWeight.bold,fontSize: 18),),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text("Date : ",style:TextStyle(color: Colors.white70),),
+                                              Text("${date}",style:TextStyle(color: CupertinoColors.white,fontWeight: FontWeight.bold,fontSize: 18),),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                              ),
+                            ),
+
+                            Column(
+
+                              children: [
+                                Text("Pre-Diagnosis Condition: ",style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,color: CupertinoColors.white),),
                               ],
                             ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                              child: Card(
 
-                          ),
-                        ),
+                                color: Color(0XFF3E3F43),
+                                elevation: 10,
 
-                        Column(
+                                //shadowColor: Colors.blue,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Text("${condition}",style:TextStyle(fontSize: 18,color: CupertinoColors.white)),
+                                ),
 
-                          children: [
-                            Text("Pre-Diagnosis Condition: ",style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold,color: CupertinoColors.white),),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                          child: Card(
-
-                            color: Color(0XFF3E3F43),
-                            elevation: 10,
-
-                            //shadowColor: Colors.blue,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25.0),
+                              ),
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Text("${condition}",style:TextStyle(fontSize: 18,color: CupertinoColors.white)),
-                            ),
-
-                          ),
-                        ),
-                        SizedBox(height: 30,),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
+                            SizedBox(height: 30,),
+                            Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text("STATUS: ",style:TextStyle(fontSize: 20,color: CupertinoColors.white) ),
-                                Text("${result}",style:TextStyle(fontSize: 20,color: colour) ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("STATUS: ",style:TextStyle(fontSize: 20,color: CupertinoColors.white) ),
+                                    Text("${result}",style:TextStyle(fontSize: 20,color: colour) ),
+                                  ],
+                                )
                               ],
-                            )
+                            ),
+
+
                           ],
                         ),
-
-
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            )
+                )
+            );
+          },
         );
       },
     );

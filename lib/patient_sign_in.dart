@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:remedium/patient_inventory.dart';
 import 'consultation.dart';
 import 'doctor_inventory.dart';
 import 'patient_sign_up.dart';
@@ -138,7 +139,7 @@ class patient_sign_in extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => consultation()),
+                              builder: (context) => patient_inventory()),
                         );
                     } catch (e) {
                       print(e);

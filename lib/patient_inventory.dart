@@ -10,6 +10,7 @@ import 'package:remedium/patient_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'consultation.dart';
+import 'recieved_result.dart';
 
 final _firestore = Firestore.instance;
 FirebaseUser loggedInUser;
@@ -42,10 +43,11 @@ class _doctor_inventoryState extends State<patient_inventory> {
       print(e);
     }
   }
-
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       drawer: nav_drawer(),
       appBar: new PreferredSize(
         child: new Container(
@@ -59,9 +61,9 @@ class _doctor_inventoryState extends State<patient_inventory> {
                       Icons.more_vert,
                       color: CupertinoColors.white,
                     ),
-                    onPressed: () {
-                      nav_drawer();
-                    }),
+
+                      onPressed: () => _scaffoldKey.currentState.openDrawer(),
+                    ),
                 SizedBox(
                   width: 5,
                 ),
@@ -175,6 +177,7 @@ class MessagesStream extends StatelessWidget {
           final degree = message.data['degree'];
           final email = message.data['email'];
           final image = message.data['image'];
+          final request=message.data['request'];
           String color;
 
 
@@ -190,6 +193,7 @@ class MessagesStream extends StatelessWidget {
                 degree: degree,
                 email: email,
                 image: image,
+              request:request
 
             );
 
@@ -210,7 +214,7 @@ class MessagesStream extends StatelessWidget {
 class MessageBubble extends StatelessWidget {
 
 
-  MessageBubble({this.doc_id,this.image,this.email,this.experience, this.last_name, this.degree, this.first_name, });
+  MessageBubble({this.doc_id,this.image,this.email,this.experience, this.last_name, this.degree, this.first_name, this.request, });
   final String first_name;
   final String email;
   final String last_name;
@@ -219,26 +223,25 @@ class MessageBubble extends StatelessWidget {
   final String image;
   final String doc_id;
 
-
+final String request;
   @override
   Widget build(BuildContext context) {
     return FlatButton(
       onPressed: () {
-        /*Navigator.push(
+      Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => doctor_profile(doc_id: doc_id,
-              )),
-        );*/
+              builder: (context) => recieved_result()),
+        );
 
       },
       child: Card(
         color: Color(0XFF3E3F43),
-        elevation: 15,
-        shadowColor: Colors.blue,
-        shape: RoundedRectangleBorder(
+        //elevation: 15,
+        //shadowColor: Colors.blue,
+        /*shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(25.0),
-        ),
+        ),*/
         child: Row(
           children: [
             Padding(
@@ -249,7 +252,8 @@ class MessageBubble extends StatelessWidget {
                   Text("Name: ${first_name}${last_name} ",style:TextStyle(color: CupertinoColors.white)),
                   Text("Degree: ${degree}",style:TextStyle(color: CupertinoColors.white)),
                   Text("Experience: ${experience}",style:TextStyle(color: CupertinoColors.white)),
-
+                  Text("Request: ${request}",style:TextStyle(color: CupertinoColors.white)),
+                  Text("Result: Awaiting",style:TextStyle(color: CupertinoColors.white)),
 
                 ],
               ),
